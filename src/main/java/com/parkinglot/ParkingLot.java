@@ -11,4 +11,11 @@ public class ParkingLot {
     }
 
 
+    public boolean unPark(Object car) {
+        if(parkList.contains(car)){
+            parkList.remove(car);
+            return true;
+        }
+        return false;
+    }
 }
