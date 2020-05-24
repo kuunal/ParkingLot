@@ -65,5 +65,26 @@ public class ParkingLotTest {
         }
     }
 
+    @Test
+    public void givenParkingLot_WhenVacant_InformsOwner(){
+        Owner owner = new Owner();
+        ParkingLot parkingLot = new ParkingLot(1);
+        parkingLot.setUser(owner);
+        Object car = new Object();
+        parkingLot.park(car);
+        parkingLot.unPark(car);
+        Assert.assertEquals(Owner.signs.PARKING_AVAILABLE,owner.getSign());
+    }
+
+    @Test
+    public void givenParkingLot_WhenUnparked_AndHasSpaceAgain_InformsOwner(){
+        Owner owner = new Owner();
+        ParkingLot parkingLot = new ParkingLot(1);
+        parkingLot.setUser(owner);
+        Object car = new Object();
+        parkingLot.park(car);
+        parkingLot.unPark(car);
+        Assert.assertEquals(Owner.signs.PARKING_AVAILABLE,owner.getSign());
+    }
 
 }
