@@ -1,4 +1,6 @@
-package com.parkinglot;
+package com.parkinglot.services;
+
+import com.parkinglot.exception.ParkingLotExceptions;
 
 import java.util.ArrayList;
 
@@ -8,7 +10,7 @@ public class ParkingLot{
     Inform inform;
     ParkingLot(){}
 
-    ParkingLot(int limit){
+    public ParkingLot(int limit){
         this.limit=limit;
     }
 
@@ -17,14 +19,15 @@ public class ParkingLot{
             parkList.add(car);
             limit--;
         }else {
-            inform.update();
-            throw new Exceptions("Lot full! Cannot park cars");
+            inform.update(limit);
+            throw new ParkingLotExceptions("Lot full! Cannot park cars");
         }
         return true;
     }
 
-    public void setUser(Observers owner){
+    public void setUser(ParkingSigns owner){
         inform = new Inform(owner);
+        inform.update(limit);
     }
 
 
@@ -32,8 +35,9 @@ public class ParkingLot{
         if(parkList.contains(car)){
             parkList.remove(car);
             limit++;
+            inform.update(limit);
             return true;
         }
-        return false;
+        throw new ParkingLotExceptions("No such car parked!");
     }
 }
