@@ -37,36 +37,33 @@ public class ParkingLotTest {
 
     @Test
     public void givenCarToPark_WhenLotIsFull_InformsOwner(){
+        Owner owner = new Owner();
         try {
             ParkingLot parkingLot = new ParkingLot(1);
-            Object[] car = {
-                    new Object(),
-                    new Object(),
-                    new Object(),
-                    new Object()
-            };
+            parkingLot.setUser(owner);
+            Object car = new Object();
+            Object car1 = new Object();
             parkingLot.park(car);
+            parkingLot.park(car1);
         }catch (Exception e){
-            Assert.assertEquals(Owner.signs.PARKING_FULL,new Owner().getSign());
+            Assert.assertEquals(Owner.signs.PARKING_FULL,owner.getSign());
         }
     }
 
     @Test
-    public void givenCarToPark_WhenLotIsFull_ReturnsException(){
+    public void givenCarToPark_WhenLotIsFull_InformsAirportSecurity(){
+        AirportSecurityClass airportSecurityClass = new AirportSecurityClass();
         try {
             ParkingLot parkingLot = new ParkingLot(1);
-            Object[] car = {
-                    new Object(),
-                    new Object(),
-                    new Object(),
-                    new Object()
-            };
+            parkingLot.setUser(airportSecurityClass);
+            Object car = new Object();
+            Object car1 = new Object();
             parkingLot.park(car);
+            parkingLot.park(car1);
         }catch (Exception e){
-            Assert.assertEquals("Lot full! Cannot park 3 cars",e.getMessage());
+            Assert.assertEquals(AirportSecurityClass.signs.PARKING_FULL,airportSecurityClass.getSign());
         }
     }
-
 
 
 }

@@ -1,6 +1,6 @@
 package com.parkinglot;
 
-public class Owner implements Observers{
+public class AirportSecurityClass implements Observers{
 
     signs sign;
 
@@ -10,6 +10,8 @@ public class Owner implements Observers{
     }
 
     public signs getSign() {
-        return this.sign;
+        return sign;
     }
+
 }
+
