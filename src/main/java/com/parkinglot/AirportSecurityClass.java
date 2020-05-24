@@ -1,17 +1,14 @@
 package com.parkinglot;
 
-public class AirportSecurityClass implements Observers{
-
-    signs sign;
+public class AirportSecurityClass implements ParkingSigns{
+    ParkingSigns.signs sign;
 
     @Override
-    public void getState(signs sign) {
+    public void getState(ParkingSigns.signs sign) {
         this.sign=sign;
     }
 
-    public signs getSign() {
-        return sign;
+    public ParkingSigns.signs getSign() {
+        return this.sign;
     }
-
 }
-

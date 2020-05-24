@@ -17,14 +17,15 @@ public class ParkingLot{
             parkList.add(car);
             limit--;
         }else {
-            inform.update();
+            inform.update(limit);
             throw new Exceptions("Lot full! Cannot park cars");
         }
         return true;
     }
 
-    public void setUser(Observers owner){
+    public void setUser(ParkingSigns owner){
         inform = new Inform(owner);
+        inform.update(limit);
     }
 
 
@@ -32,6 +33,7 @@ public class ParkingLot{
         if(parkList.contains(car)){
             parkList.remove(car);
             limit++;
+            inform.update(limit);
             return true;
         }
         return false;

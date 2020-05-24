@@ -1,6 +1,6 @@
 package com.parkinglot;
 
-public class Owner implements Observers{
+public class Owner implements ParkingSigns {
 
     signs sign;
 
