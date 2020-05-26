@@ -17,8 +17,11 @@ public class Owner implements ParkingSigns {
         return this.sign;
     }
 
-    public void setTimeAndPayment(Object vehicle, int charge){
-        paymentArrayList.add(new Payment(vehicle,charge));
+    public void setTimeAndPayment(Object vehicle, int... charge){
+        if(charge.length>0)
+            paymentArrayList.add(new Payment(vehicle,charge[0]));
+        else
+            paymentArrayList.add(new Payment(vehicle));
     }
 
     public String getTime(Object vehicle){

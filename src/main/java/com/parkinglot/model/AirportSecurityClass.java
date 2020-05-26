@@ -17,7 +17,7 @@ public class AirportSecurityClass implements ParkingSigns {
         return this.sign;
     }
 
-    public void setTimeAndPayment(Object vehicle, int charge){
+    public void setTimeAndPayment(Object vehicle, int... charge){
         paymentArrayList.add(new Payment(vehicle,charge));
     }
 

@@ -15,6 +15,7 @@ public class ParkingManager {
         this.numberOfLots=1;
     }
 
+
     public void setNumberOfLots(int numberOfLots, Owner owner, int... capacity){
         this.numberOfLots = numberOfLots;
         IntStream.range(0,numberOfLots)
@@ -39,15 +40,25 @@ public class ParkingManager {
         return parkingLotArrayList.size();
     }
 
-    public void park(Object vehicle){
-        parkingLot = parkingLotArrayList.stream()
-                .filter(e->e.isParked(vehicle))
-                .findFirst()
-                .orElse(getEvenlyDistributed(vehicle));
-        parkingLot.park(vehicle);
+    public void park(Object vehicle,boolean... isHandicapped){
+        if(isHandicapped.length>0&&isHandicapped[0]==true){
+            parkingLotArrayList.stream()
+                                .forEach(e->e.handicappedParking(vehicle));
+
+        }else {
+            parkingLot = parkingLotArrayList.stream()
+                    .filter(e -> e.isParked(vehicle))
+                    .findFirst()
+                    .orElse(getEvenlyDistributed(vehicle));
+            parkingLot.park(vehicle);
+            if(!isParked(vehicle))
+                parkingLotArrayList.stream()
+                        .forEach(e->e.handicappedParking(vehicle));
+
+        }
     }
 
-    public boolean isParked(Object vehicle){
+    public boolean isParked(Object vehicle, boolean... isHandicapped){
         parkingLot = parkingLotArrayList.stream()
                 .filter(e->e.isParked(vehicle))
                 .findFirst()

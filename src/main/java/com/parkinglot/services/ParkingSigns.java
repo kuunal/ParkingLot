@@ -5,7 +5,7 @@ public interface ParkingSigns {
 
     public void getState(signs sign);
 
-    public void setTimeAndPayment(Object vehicle, int charge);
+    public void setTimeAndPayment(Object vehicle, int... charge);
 
     public String getTime(Object vehicle);
 
