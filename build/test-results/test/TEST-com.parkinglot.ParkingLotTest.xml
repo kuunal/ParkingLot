@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.parkinglot.ParkingLotTest" tests="21" skipped="0" failures="0" errors="0" timestamp="2020-05-26T21:27:12" hostname="DESKTOP-196HMRI" time="0.082">
+<testsuite name="com.parkinglot.ParkingLotTest" tests="24" skipped="0" failures="0" errors="0" timestamp="2020-05-26T23:42:37" hostname="DESKTOP-196HMRI" time="0.11">
   <properties/>
-  <testcase name="givenVehicleOfHandicapped_WhenToParkInReservation_ReturnsTrue" classname="com.parkinglot.ParkingLotTest" time="0.015"/>
-  <testcase name="givenVehicle_WhenToPark_ShouldReturnTimeToSecurity" classname="com.parkinglot.ParkingLotTest" time="0.022"/>
-  <testcase name="givenVehicleOfHandicapped_WhenToParkInReservation_ReturnsFalse" classname="com.parkinglot.ParkingLotTest" time="0.0"/>
-  <testcase name="givenVehicles_WhenToPark_ShouldParkEvenly" classname="com.parkinglot.ParkingLotTest" time="0.001"/>
+  <testcase name="givenVehicleOfHandicapped_WhenToParkInReservation_ReturnsTrue" classname="com.parkinglot.ParkingLotTest" time="0.043"/>
+  <testcase name="givenVehicle_WhenToPark_ShouldReturnTimeToSecurity" classname="com.parkinglot.ParkingLotTest" time="0.028"/>
+  <testcase name="givenVehicles_WhenToPark_ShouldParkEvenly" classname="com.parkinglot.ParkingLotTest" time="0.007"/>
+  <testcase name="givenHandicapped_WhenUnParked_ReturnsTrue" classname="com.parkinglot.ParkingLotTest" time="0.001"/>
   <testcase name="givenVehicle_WhenToPark_ShouldParkInLot_WithMostEmptySlots" classname="com.parkinglot.ParkingLotTest" time="0.0"/>
-  <testcase name="givenCarToPark_WhenLotIsFull_InformsAirportSecurity" classname="com.parkinglot.ParkingLotTest" time="0.003"/>
-  <testcase name="givenParkedVehicle_WhenToFind_ReturnsLotAndPosition" classname="com.parkinglot.ParkingLotTest" time="0.014"/>
+  <testcase name="givenParkedVehicle_WhenQueriedToFind_ReturnsLotAndPosition" classname="com.parkinglot.ParkingLotTest" time="0.0"/>
+  <testcase name="givenCarToPark_WhenLotIsFull_InformsAirportSecurity" classname="com.parkinglot.ParkingLotTest" time="0.005"/>
   <testcase name="givenVehicleOfHandicapped_WhenToParkInDifferentSlot_ReturnsTrue" classname="com.parkinglot.ParkingLotTest" time="0.0"/>
   <testcase name="givenCarToPark_WhenLotIsFull_InformsOwner" classname="com.parkinglot.ParkingLotTest" time="0.0"/>
   <testcase name="givenUnParkedVehicleToUnPark_WhenInParkingManager_ThrowsException" classname="com.parkinglot.ParkingLotTest" time="0.003"/>
@@ -15,13 +15,16 @@
   <testcase name="givenUnParkedVehicle_WhenToFind_ThrowsException" classname="com.parkinglot.ParkingLotTest" time="0.001"/>
   <testcase name="givenSameVehicle_WhenToPark_InDifferentLot_ThrowsException" classname="com.parkinglot.ParkingLotTest" time="0.001"/>
   <testcase name="givenDriver_WhenUnparksCar_ReturnsTrue" classname="com.parkinglot.ParkingLotTest" time="0.0"/>
-  <testcase name="givenVehicle_WhenToPark_ShouldReturnTime" classname="com.parkinglot.ParkingLotTest" time="0.0"/>
-  <testcase name="givenVehicle_WhenToPark_ReturnsTrue" classname="com.parkinglot.ParkingLotTest" time="0.003"/>
-  <testcase name="givenParkedVehicle_WhenToPark_ThrowsException" classname="com.parkinglot.ParkingLotTest" time="0.001"/>
-  <testcase name="givenParkingLot_WhenUnparked_AndHasSpaceAgain_InformsOwner" classname="com.parkinglot.ParkingLotTest" time="0.001"/>
-  <testcase name="givenNumberOfLots_WhenLoaded_ReturnsTrue" classname="com.parkinglot.ParkingLotTest" time="0.0"/>
-  <testcase name="givenParkedVehicleToUnPark_WhenInParkingManager_ReturnsTrue" classname="com.parkinglot.ParkingLotTest" time="0.002"/>
-  <testcase name="givenVehicleOfHandicapped_WhenToUnParkInDifferentSlot_ReturnsTrue" classname="com.parkinglot.ParkingLotTest" time="0.002"/>
+  <testcase name="givenLargeVehicle_WhenToPark_ShouldParkInLotWithMostFreeSpace" classname="com.parkinglot.ParkingLotTest" time="0.001"/>
+  <testcase name="givenVehicle_WhenToPark_ShouldReturnTime" classname="com.parkinglot.ParkingLotTest" time="0.002"/>
+  <testcase name="givenVehicle_WhenToPark_ReturnsTrue" classname="com.parkinglot.ParkingLotTest" time="0.001"/>
+  <testcase name="givenParkedVehicle_WhenToPark_ThrowsException" classname="com.parkinglot.ParkingLotTest" time="0.0"/>
+  <testcase name="givenParkingLot_WhenUnparked_AndHasSpaceAgain_InformsOwner" classname="com.parkinglot.ParkingLotTest" time="0.0"/>
+  <testcase name="givenMultipleHandicap_WhenOneLotIsFull_ShouldRedirectToAnother" classname="com.parkinglot.ParkingLotTest" time="0.001"/>
+  <testcase name="agivenLargeVehicle_WhenToPark_ShouldParkInLotWithMostFreeSpace" classname="com.parkinglot.ParkingLotTest" time="0.0"/>
+  <testcase name="givenHandicap_WhenToParkAtDifferentLot_ShouldNotBeKnownToOtherLots" classname="com.parkinglot.ParkingLotTest" time="0.0"/>
+  <testcase name="givenNumberOfLots_WhenLoaded_ReturnsTrue" classname="com.parkinglot.ParkingLotTest" time="0.001"/>
+  <testcase name="givenParkedVehicleToUnPark_WhenInParkingManager_ReturnsTrue" classname="com.parkinglot.ParkingLotTest" time="0.0"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

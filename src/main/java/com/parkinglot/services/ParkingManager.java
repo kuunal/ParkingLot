@@ -42,23 +42,19 @@ public class ParkingManager {
 
     public void park(Object vehicle,boolean... isHandicapped){
         if(isHandicapped.length>0&&isHandicapped[0]==true){
-            parkingLotArrayList.stream()
-                                .forEach(e->e.handicappedParking(vehicle));
-
+                parkingLotArrayList.stream()
+                        .filter(e->!isParked(vehicle))
+                        .forEach(e->e.handicappedParking(vehicle));
         }else {
             parkingLot = parkingLotArrayList.stream()
                     .filter(e -> e.isParked(vehicle))
                     .findFirst()
                     .orElse(getEvenlyDistributed(vehicle));
             parkingLot.park(vehicle);
-            if(!isParked(vehicle))
-                parkingLotArrayList.stream()
-                        .forEach(e->e.handicappedParking(vehicle));
-
         }
     }
 
-    public boolean isParked(Object vehicle, boolean... isHandicapped){
+    public boolean isParked(Object vehicle){
         parkingLot = parkingLotArrayList.stream()
                 .filter(e->e.isParked(vehicle))
                 .findFirst()
@@ -84,7 +80,7 @@ public class ParkingManager {
 
     public void unPark(Object vehicle){
         parkingLot = parkingLotArrayList.stream()
-                .filter(e->e.isParked(vehicle))
+                .filter(e -> e.isParked(vehicle))
                 .findFirst()
                 .orElse(getEvenlyDistributed(vehicle));
         parkingLot.unPark(vehicle);
@@ -97,11 +93,8 @@ public class ParkingManager {
     }
 
     public String getVehicleLocation(Object vehicle){
-        getEvenlyDistributed(vehicle);
         int lotNumber = parkingLotArrayList.indexOf(parkingLot);
-        int position = this.parkingLot.vehicleList.indexOf(vehicle);
-        if(position == -1)
-            throw new ParkingLotException("No such car parked");
+        int position = this.parkingLot.getIndexOfVehicle(vehicle);
         return "Parking Lot: "+lotNumber+" Position: "+position;
     }
 

@@ -10,7 +10,7 @@ import java.util.stream.IntStream;
 public class ParkingLot{
     int capacity;
     ParkingSigns owner;
-    public ArrayList<Object> vehicleList = new ArrayList();
+    ArrayList<Object> vehicleList = new ArrayList();
     Inform inform;
     Payment payment = new Payment();
     int handicapReservationSlot;
@@ -115,7 +115,7 @@ public class ParkingLot{
     }
 
     public int getEmptySlots(){
-        return this.capacity-this.vehicleList.size();
+        return this.capacity-this.vehicleList.size()-this.handicapReservationSlot;
     }
 
     public String getTime(Object vehicle){
@@ -126,4 +126,10 @@ public class ParkingLot{
         IntStream.range(0,handicapReservationSlot)
                 .forEach(e->vehicleList.add(null));
     }
+
+    public int getIndexOfVehicle(Object vehicle){
+        return vehicleList.indexOf(vehicle);
+    }
+
 }
+

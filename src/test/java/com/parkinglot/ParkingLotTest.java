@@ -154,15 +154,15 @@ public class ParkingLotTest {
     public void givenSameVehicle_WhenToPark_InDifferentLot_ThrowsException() {
         try {
             ParkingManager parkingManager = new ParkingManager();
+            ParkingLot parkingLot1, parkingLot2;
             ParkingLot[] parkingLot = {
-                    new ParkingLot(4,owner),
-                    new ParkingLot(4,owner)
+                    parkingLot1 = new ParkingLot(4,owner),
+                    parkingLot2 = new ParkingLot(4,owner)
             };
             Object vehicle = new Object();
             parkingManager.setNumberOfLots(parkingLot);
             parkingManager.park(vehicle);
             parkingManager.park(vehicle);
-            boolean isParked = parkingManager.isParked(vehicle);
         } catch (ParkingLotException e) {
             Assert.assertEquals("Vehicle already parked!", e.getMessage());
         }
@@ -197,7 +197,7 @@ public class ParkingLotTest {
     }
 
     @Test
-    public void givenParkedVehicle_WhenToFind_ReturnsLotAndPosition(){
+    public void givenParkedVehicle_WhenQueriedToFind_ReturnsLotAndPosition(){
         ParkingManager parkingManager = new ParkingManager();
         ParkingLot[] parkingLot = {
               new ParkingLot(4,owner),
@@ -287,30 +287,32 @@ public class ParkingLotTest {
         parkingManager.park(vehicle2);
         parkingManager.park(vehicle3);
         parkingManager.park(vehicle);
-        Assert.assertEquals(parkingLot1.getEmptySlots(),parkingLot2.getEmptySlots());
+        Assert.assertEquals("2   2",parkingLot1.getEmptySlots()+"   "+parkingLot2.getEmptySlots());
     }
 
     @Test
     public void givenVehicleOfHandicapped_WhenToParkInReservation_ReturnsTrue(){
         ParkingManager parkingManager = new ParkingManager();
-        ParkingLot parkingLot1,parkingLot2;
+        ParkingLot parkingLot0,parkingLot1;
         ParkingLot[] parkingLot = {
-                parkingLot1 = new ParkingLot(10,owner,4),
-                parkingLot2 = new ParkingLot(10,owner,3)
+                parkingLot0 = new ParkingLot(10,owner,4),
+                parkingLot1 = new ParkingLot(10,owner,3)
         };
         Object vehicle2 = new Object();
         Object vehicle1 = new Object();
         parkingManager.setNumberOfLots(parkingLot);
         parkingManager.park(vehicle1,true);
         parkingManager.park(vehicle2,true);
-        Assert.assertTrue(parkingManager.isParked(vehicle1));
-        Assert.assertTrue(parkingLot1.vehicleList.get(0).equals(vehicle1));
-        Assert.assertTrue(parkingLot1.vehicleList.get(1).equals(vehicle2));
+        String firstVehilceLocation = parkingManager.getVehicleLocation(vehicle1);
+        String secondVehilceLocation = parkingManager.getVehicleLocation(vehicle2);
+        Assert.assertEquals("Parking Lot: 0 Position: 0"+"  "+"Parking Lot: 0 Position: 1",
+                firstVehilceLocation+"  "+secondVehilceLocation);
+
     }
 
 
     @Test
-    public void givenVehicleOfHandicapped_WhenToParkInReservation_ReturnsFalse(){
+    public void givenHandicap_WhenToParkAtDifferentLot_ShouldNotBeKnownToOtherLots(){
         ParkingManager parkingManager = new ParkingManager();
         ParkingLot parkingLot1,parkingLot2;
         ParkingLot[] parkingLot = {
@@ -322,31 +324,47 @@ public class ParkingLotTest {
         parkingManager.setNumberOfLots(parkingLot);
         parkingManager.park(vehicle1,true);
         parkingManager.park(vehicle2,true);
-        Assert.assertFalse(parkingLot1.vehicleList.get(0).equals(vehicle2));
+        Assert.assertFalse(parkingLot2.isParked(vehicle2)&&parkingLot2.isParked(vehicle1));
     }
-
 
     @Test
     public void givenVehicleOfHandicapped_WhenToParkInDifferentSlot_ReturnsTrue(){
         ParkingLot parkingLot1,parkingLot2 = null;
         Object vehicle2 = new Object();
         Object vehicle1 = new Object();
-            ParkingManager parkingManager = new ParkingManager();
-            ParkingLot[] parkingLot = {
-                    parkingLot1 = new ParkingLot(10,owner,0),
-                    parkingLot2 = new ParkingLot(10,owner,3)
-            };
-            parkingManager.setNumberOfLots(parkingLot);
-            parkingManager.park(vehicle1,true);
-            parkingManager.park(vehicle2,true);
-            Assert.assertTrue(parkingLot2.vehicleList.get(1).equals(vehicle2));
+        ParkingManager parkingManager = new ParkingManager();
+        ParkingLot[] parkingLot = {
+                parkingLot1 = new ParkingLot(10,owner,0),
+                parkingLot2 = new ParkingLot(10,owner,3)
+        };
+        parkingManager.setNumberOfLots(parkingLot);
+        parkingManager.park(vehicle1,true);
+        parkingManager.park(vehicle2,true);
+        Assert.assertTrue(!parkingLot1.isParked(vehicle1) && !parkingLot1.isParked(vehicle2) &&
+                parkingLot2.isParked(vehicle1) && parkingLot2.isParked(vehicle2));
 
     }
 
+    @Test
+    public void givenMultipleHandicap_WhenOneLotIsFull_ShouldRedirectToAnother(){
+        ParkingLot parkingLot1,parkingLot2 = null;
+        Object vehicle2 = new Object();
+        Object vehicle1 = new Object();
+        ParkingManager parkingManager = new ParkingManager();
+        ParkingLot[] parkingLot = {
+                parkingLot1 = new ParkingLot(10,owner,1),
+                parkingLot2 = new ParkingLot(10,owner,3)
+        };
+        parkingManager.setNumberOfLots(parkingLot);
+        parkingManager.park(vehicle1,true);
+        parkingManager.park(vehicle2,true);
+        Assert.assertTrue(parkingLot1.isParked(vehicle1) && parkingLot2.isParked(vehicle2) &&
+                !parkingLot2.isParked(vehicle1) && !parkingLot1.isParked(vehicle2) );
 
+    }
 
     @Test
-    public void givenVehicleOfHandicapped_WhenToUnParkInDifferentSlot_ReturnsTrue(){
+    public void givenHandicapped_WhenUnParked_ReturnsTrue(){
         ParkingLot parkingLot1,parkingLot2 = null;
         Object vehicle2 = new Object();
         Object vehicle1 = new Object();
@@ -360,29 +378,42 @@ public class ParkingLotTest {
             parkingManager.park(vehicle1,true);
             parkingManager.park(vehicle2,true);
             parkingManager.unPark(vehicle2);
-
         }catch (ParkingLotException e){
             Assert.assertEquals("Unparked vehicle for handicap",e.getMessage());
         }
     }
 
     @Test
-    public void givenParkinglot_WhenisFullForNormal_ParksInReservedSlots(){
-        ParkingLot parkingLot1 = null,parkingLot2 = null;
-        Object vehicle2 = new Object();
-        Object vehicle1 = new Object();
+    public void givenLargeVehicle_WhenToPark_ShouldParkInLotWithMostFreeSpace() {
         ParkingManager parkingManager = new ParkingManager();
-        try{
-            ParkingLot[] parkingLot = {
-                    parkingLot1 = new ParkingLot(5,owner,5),
-                    parkingLot2 = new ParkingLot(3,owner,3)
-            };
-            parkingManager.setNumberOfLots(parkingLot);
-            parkingManager.park(vehicle1);
-            parkingManager.park(vehicle2);
-        }catch (ParkingLotException e){
-            Assert.assertEquals("",e.getMessage());
-            Assert.assertTrue(parkingLot1.vehicleList.get(1)==vehicle2);
-        }
+        ParkingLot parkingLot0,parkingLot1,parkingLot2;
+        ParkingLot[] parkingLot = {
+                parkingLot0 = new ParkingLot(44 ,owner),
+                parkingLot1 = new ParkingLot(79,owner),
+                parkingLot2 = new ParkingLot(13,owner)
+        };
+        Object vehicle = new Object();
+        parkingManager.setNumberOfLots(parkingLot);
+        parkingManager.park(vehicle);
+        String getLargeVehicleLocation = parkingManager.getVehicleLocation(vehicle);
+        Assert.assertEquals( "Parking Lot: 1 Position: 0",getLargeVehicleLocation);
     }
+
+    @Test
+    public void givenLargeVehicle_WhenToPark_ShouldParkInLotWithMostFreeSpace_WithoutaffectingReservation() {
+        ParkingManager parkingManager = new ParkingManager();
+        ParkingLot parkingLot0,parkingLot1,parkingLot2;
+        ParkingLot[] parkingLot = {
+                parkingLot0 = new ParkingLot(44 ,owner,3),
+                parkingLot1 = new ParkingLot(79,owner,55),
+                parkingLot2 = new ParkingLot(13,owner)
+        };
+        Object vehicle = new Object();
+        parkingManager.setNumberOfLots(parkingLot);
+        parkingManager.park(vehicle);
+        String getLargeVehicleLocation = parkingManager.getVehicleLocation(vehicle);
+        Assert.assertEquals( "Parking Lot: 0 Position: 3",getLargeVehicleLocation);
+    }
+
+
 }
