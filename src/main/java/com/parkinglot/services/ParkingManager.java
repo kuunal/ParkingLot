@@ -94,4 +94,11 @@ public class ParkingManager {
         return "Parking Lot: "+lotNumber+" Position: "+position;
     }
 
+    public String getTime(Object vehicle){
+        for(ParkingLot parkingLot : parkingLotArrayList){
+            return parkingLot.getTime(vehicle);
+        }
+        throw new ParkingLotException("No such car parked!");
+    }
+
 }

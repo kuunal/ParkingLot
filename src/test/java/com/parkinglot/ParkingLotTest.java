@@ -10,6 +10,9 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 public class ParkingLotTest {
     Owner owner;
 
@@ -23,6 +26,7 @@ public class ParkingLotTest {
     public void givenVehicle_WhenToPark_ReturnsTrue() {
         ParkingLot parkingLot = new ParkingLot();
         Object vehicle = new Object();
+        parkingLot.setUser(owner);
         parkingLot.park(vehicle);
         Boolean isParked = parkingLot.isParked(vehicle);
         Assert.assertTrue(isParked);
@@ -61,6 +65,7 @@ public class ParkingLotTest {
             ParkingLot parkingLot = new ParkingLot();
             Object car = new Object();
             Object car1 = new Object();
+            parkingLot.setUser(owner);
             parkingLot.park(car);
             parkingLot.unPark(car1);
         } catch (ParkingLotException e) {
@@ -226,6 +231,43 @@ public class ParkingLotTest {
         }catch (ParkingLotException e){
             Assert.assertEquals("No such car parked",e.getMessage());
         }
+    }
+
+    @Test
+    public void givenVehicle_WhenToPark_ShouldReturnTime() {
+        ParkingManager parkingManager = new ParkingManager();
+        ParkingLot[] parkingLot = {
+                new ParkingLot(44 ,owner),
+                new ParkingLot(8,owner),
+                new ParkingLot(7,owner)
+        };
+        Object vehicle = new Object();
+        parkingManager.setNumberOfLots(parkingLot);
+        parkingManager.park(vehicle);
+        String time = parkingManager.getTime(vehicle);
+        LocalDateTime localDateTime = LocalDateTime.now();
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy hh:MM:ss");
+        String expectedTime = localDateTime.format(dateTimeFormatter);
+        Assert.assertEquals(expectedTime,time);
+    }
+
+    @Test
+    public void givenVehicle_WhenToPark_ShouldReturnTimeToSecurity() {
+        AirportSecurityClass airportSecurityClass = new AirportSecurityClass();
+        ParkingManager parkingManager = new ParkingManager();
+        ParkingLot[] parkingLot = {
+                new ParkingLot(44 ,airportSecurityClass),
+                new ParkingLot(8,owner),
+                new ParkingLot(7,owner)
+        };
+        Object vehicle = new Object();
+        parkingManager.setNumberOfLots(parkingLot);
+        parkingManager.park(vehicle);
+        String time = parkingManager.getTime(vehicle);
+        LocalDateTime localDateTime = LocalDateTime.now();
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy hh:MM:ss");
+        String expectedTime = localDateTime.format(dateTimeFormatter);
+        Assert.assertEquals(expectedTime,time);
     }
 
 }
