@@ -270,4 +270,24 @@ public class ParkingLotTest {
         Assert.assertEquals(expectedTime,time);
     }
 
+    @Test
+    public void givenVehicles_WhenToPark_ShouldParkEvenly(){
+        ParkingManager parkingManager = new ParkingManager();
+        ParkingLot parkingLot1,parkingLot2;
+        ParkingLot[] parkingLot = {
+                parkingLot1 = new ParkingLot(4,owner),
+                parkingLot2 = new ParkingLot(4,owner)
+        };
+        Object vehicle = new Object();
+        Object vehicle1 = new Object();
+        Object vehicle2 = new Object();
+        Object vehicle3 = new Object();
+        parkingManager.setNumberOfLots(parkingLot);
+        parkingManager.park(vehicle1);
+        parkingManager.park(vehicle2);
+        parkingManager.park(vehicle3);
+        parkingManager.park(vehicle);
+        Assert.assertEquals(parkingLot1.getEmptySlots(),parkingLot2.getEmptySlots());
+    }
+
 }
