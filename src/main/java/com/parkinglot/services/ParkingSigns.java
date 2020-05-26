@@ -1,4 +1,4 @@
-package com.parkinglot;
+package com.parkinglot.services;
 
 public interface ParkingSigns {
     public enum signs{PARKING_FULL,PARKING_AVAILABLE};

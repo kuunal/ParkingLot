@@ -1,14 +1,28 @@
-package com.parkinglot;
+package com.parkinglot.services;
+
+import com.parkinglot.exceptions.ParkingLotException;
+import com.parkinglot.model.Owner;
 
 import java.util.ArrayList;
 
 public class ParkingLot{
     int capacity;
+    int slot=0;
     ArrayList<Object> vehicleList = new ArrayList();
     Inform inform;
 
-    ParkingLot(){
-        this.capacity =100;
+    public ParkingLot(){
+        this.capacity=99;
+    }
+
+    public ParkingLot(Owner owner){
+        this.capacity=100;
+        inform = new Inform(owner);
+    }
+
+    public ParkingLot(int capacity,Owner owner){
+        this.capacity =capacity;
+        inform = new Inform(owner);
     }
 
     public void setCapacity(int capacity) {
@@ -49,5 +63,8 @@ public class ParkingLot{
         return true;
     }
 
+    public int getEmptySlots(){
+        return this.capacity-this.vehicleList.size();
+    }
 
 }

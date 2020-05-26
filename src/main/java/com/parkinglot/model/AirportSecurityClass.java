@@ -1,6 +1,8 @@
-package com.parkinglot;
+package com.parkinglot.model;
 
-public class AirportSecurityClass implements ParkingSigns{
+import com.parkinglot.services.ParkingSigns;
+
+public class AirportSecurityClass implements ParkingSigns {
     ParkingSigns.signs sign;
 
     @Override

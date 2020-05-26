@@ -1,4 +1,4 @@
-package com.parkinglot;
+package com.parkinglot.services;
 
 import java.util.ArrayList;
 

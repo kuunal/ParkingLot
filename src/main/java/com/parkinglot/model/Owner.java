@@ -1,4 +1,6 @@
-package com.parkinglot;
+package com.parkinglot.model;
+
+import com.parkinglot.services.ParkingSigns;
 
 public class Owner implements ParkingSigns {
 
