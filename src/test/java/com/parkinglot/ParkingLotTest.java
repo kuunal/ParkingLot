@@ -131,18 +131,22 @@ public class ParkingLotTest {
     public void givenVehicle_WhenToPark_ShouldParkInLot_WithMostEmptySlots() {
         ParkingManager parkingManager = new ParkingManager();
         ParkingLot[] parkingLot = {
-                new ParkingLot(4 ,owner),
-                new ParkingLot(4,owner)
+                new ParkingLot(44 ,owner),
+                new ParkingLot(8,owner),
+                new ParkingLot(7,owner)
         };
         Object vehicle = new Object();
+        Object vehicle1 = new Object();
         parkingManager.setNumberOfLots(parkingLot);
         parkingManager.park(vehicle);
-        boolean isParked = parkingManager.isParked(vehicle);
-        Assert.assertTrue(isParked);
+        parkingManager.park(vehicle1);
+        boolean isParked = parkingManager.isParked(vehicle1);
+        boolean isParked1 = parkingManager.isParked(vehicle);
+        Assert.assertTrue(isParked && isParked1);
     }
 
     @Test
-    public void givenParkedVehicle_WhenToPark_InDifferentLot_ThrowsException() {
+    public void givenSameVehicle_WhenToPark_InDifferentLot_ThrowsException() {
         try {
             ParkingManager parkingManager = new ParkingManager();
             ParkingLot[] parkingLot = {
@@ -184,6 +188,43 @@ public class ParkingLotTest {
             boolean isUnparked = parkingManager.isUnparked(vehicle);
         }catch (ParkingLotException e){
             Assert.assertEquals("No such vehicle parked!",e.getMessage());
+        }
+    }
+
+    @Test
+    public void givenParkedVehicle_WhenToFind_ReturnsLotAndPosition(){
+        ParkingManager parkingManager = new ParkingManager();
+        ParkingLot[] parkingLot = {
+              new ParkingLot(4,owner),
+              new ParkingLot(24,owner)
+        };
+        parkingManager.setNumberOfLots(parkingLot);
+        Object vehicle = new Object();
+        Object vehicle1 = new Object();
+        parkingManager.park(vehicle);
+        parkingManager.park(vehicle1);
+        String vehicleLocation = parkingManager.getVehicleLocation(vehicle1);
+        Assert.assertEquals("Parking Lot: 1 Position: 1",vehicleLocation);
+    }
+
+
+    @Test
+    public void givenUnParkedVehicle_WhenToFind_ThrowsException(){
+        try{
+            ParkingManager parkingManager = new ParkingManager();
+            ParkingLot[] parkingLot = {
+                    new ParkingLot(4,owner),
+                    new ParkingLot(24,owner)
+            };
+            parkingManager.setNumberOfLots(parkingLot);
+            Object vehicle = new Object();
+            Object vehicle1 = new Object();
+            Object vehicle3 = new Object();
+            parkingManager.park(vehicle);
+            parkingManager.park(vehicle1);
+            String vehicleLocation = parkingManager.getVehicleLocation(vehicle3);
+        }catch (ParkingLotException e){
+            Assert.assertEquals("No such car parked",e.getMessage());
         }
     }
 
