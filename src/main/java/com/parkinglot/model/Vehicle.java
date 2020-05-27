@@ -6,20 +6,30 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class Payment {
+public class Vehicle {
 
+    String color;
     int parkingCharges;
     Object vehicle;
     String time;
+    int slot;
 
-    public Payment(){}
+    public Vehicle(){
+        this.time=setTime();
+    }
 
-    public Payment(Object vehicle, int... charges){
+    public Vehicle(String color){
+        this.color=color;
+        this.time=setTime();
+    }
+
+    public Vehicle(Object vehicle, int... charges){
         this.vehicle = vehicle;
         this.time=setTime();
         if(charges.length>0)
             parkingCharges = charges[0];
     }
+
 
     public String setTime(){
         LocalDateTime localDateTime=LocalDateTime.now();
@@ -31,6 +41,16 @@ public class Payment {
         return this.time;
     }
 
+    public int getSlot() {
+        return this.slot;
+    }
 
+    public String getColor() {
+        return this.color;
+    }
+
+    public void setSlot(int slot) {
+        this.slot = slot;
+    }
 
 }

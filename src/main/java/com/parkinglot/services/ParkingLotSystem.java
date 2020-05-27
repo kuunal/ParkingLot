@@ -2,16 +2,19 @@ package com.parkinglot.services;
 
 import com.parkinglot.exceptions.ParkingLotException;
 import com.parkinglot.model.Owner;
+import com.parkinglot.model.Vehicle;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class ParkingManager {
+public class ParkingLotSystem {
     public ArrayList<ParkingLot> parkingLotArrayList = new ArrayList<>();
     private int numberOfLots;
     ParkingLot parkingLot;
 
-    public ParkingManager(){
+    public ParkingLotSystem(){
         this.numberOfLots=1;
     }
 
@@ -30,8 +33,8 @@ public class ParkingManager {
     }
 
     public void setNumberOfLots(ParkingLot ...parkingLot){
-        for(ParkingLot parkingLotObject : parkingLot){
-            parkingLotArrayList.add(parkingLotObject);
+        for(ParkingLot parkingLotVehicle : parkingLot){
+            parkingLotArrayList.add(parkingLotVehicle);
         }
     }
 
@@ -40,7 +43,7 @@ public class ParkingManager {
         return parkingLotArrayList.size();
     }
 
-    public void park(Object vehicle,boolean... isHandicapped){
+    public void park(Vehicle vehicle, boolean... isHandicapped){
         if(isHandicapped.length>0&&isHandicapped[0]==true){
                 parkingLotArrayList.stream()
                         .filter(e->!isParked(vehicle))
@@ -54,7 +57,7 @@ public class ParkingManager {
         }
     }
 
-    public boolean isParked(Object vehicle){
+    public boolean isParked(Vehicle vehicle){
         parkingLot = parkingLotArrayList.stream()
                 .filter(e->e.isParked(vehicle))
                 .findFirst()
@@ -64,7 +67,7 @@ public class ParkingManager {
         return true;
     }
 
-    public ParkingLot getEvenlyDistributed(Object vehicle){
+    public ParkingLot getEvenlyDistributed(Vehicle vehicle){
         int maximumSlotsLot = parkingLotArrayList.get(0).getEmptySlots();
         parkingLot = parkingLotArrayList.get(0);
         parkingLotArrayList.stream()
@@ -78,7 +81,7 @@ public class ParkingManager {
         maximumSlotsLot = emptySlots;
     }
 
-    public void unPark(Object vehicle){
+    public void unPark(Vehicle vehicle){
         parkingLot = parkingLotArrayList.stream()
                 .filter(e -> e.isParked(vehicle))
                 .findFirst()
@@ -88,19 +91,19 @@ public class ParkingManager {
         parkingLot.unPark(vehicle);
     }
 
-    public boolean isUnparked(Object vehicle){
+    public boolean isUnparked(Vehicle vehicle){
         if(isParked(vehicle))
             return false;
         return true;
     }
 
-    public String getVehicleLocation(Object vehicle){
+    public String getVehicleLocation(Vehicle vehicle){
         int lotNumber = parkingLotArrayList.indexOf(parkingLot);
         int position = this.parkingLot.getIndexOfVehicle(vehicle);
         return "Parking Lot: "+lotNumber+" Position: "+position;
     }
 
-    public String getTime(Object vehicle){
+    public String getTime(Vehicle vehicle){
         for(ParkingLot parkingLot : parkingLotArrayList){
             return parkingLot.getTime(vehicle);
         }
@@ -109,6 +112,14 @@ public class ParkingManager {
 
     public void updateHandicapReservation(int parkingLotNumber, int noOfSlots){
         parkingLotArrayList.get(parkingLotNumber).setHandicapReservationSlot(noOfSlots);
+    }
+
+    public List<Integer> getLocationByColor(String color){
+        List<Integer> list = new ArrayList<>();
+        for(ParkingLot parkingLot : parkingLotArrayList){
+            list.addAll(parkingLot.getVehiclesByColor(color));
+        }
+        return list;
     }
 
 }
