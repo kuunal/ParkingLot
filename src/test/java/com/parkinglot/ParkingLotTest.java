@@ -369,7 +369,7 @@ public class ParkingLotTest {
         Object vehicle2 = new Object();
         Object vehicle1 = new Object();
         ParkingManager parkingManager = new ParkingManager();
-        try{
+
             ParkingLot[] parkingLot = {
                     parkingLot1 = new ParkingLot(10,owner,3),
                     parkingLot2 = new ParkingLot(10,owner,3)
@@ -378,9 +378,7 @@ public class ParkingLotTest {
             parkingManager.park(vehicle1,true);
             parkingManager.park(vehicle2,true);
             parkingManager.unPark(vehicle2);
-        }catch (ParkingLotException e){
-            Assert.assertEquals("Unparked vehicle for handicap",e.getMessage());
-        }
+            Assert.assertTrue(parkingManager.isUnparked(vehicle2));
     }
 
     @Test
@@ -415,5 +413,40 @@ public class ParkingLotTest {
         Assert.assertEquals( "Parking Lot: 0 Position: 3",getLargeVehicleLocation);
     }
 
+    @Test
+    public void givenParkingSystem_WhenModifiedHandicapSlot_ShouldWorkFine() {
+        ParkingManager parkingManager = new ParkingManager();
+        ParkingLot parkingLot0,parkingLot1,parkingLot2;
+        ParkingLot[] parkingLot = {
+                parkingLot0 = new ParkingLot(44 ,owner,3),
+                parkingLot1 = new ParkingLot(79,owner,4),
+                parkingLot2 = new ParkingLot(13,owner)
+        };
+        Object vehicle = new Object();
+        parkingManager.setNumberOfLots(parkingLot);
+        parkingManager.updateHandicapReservation(1,8);
+        parkingManager.park(vehicle);
+        String getLargeVehicleLocation = parkingManager.getVehicleLocation(vehicle);
+        Assert.assertEquals( "Parking Lot: 1 Position: 8",getLargeVehicleLocation);
+    }
+
+    @Test
+    public void givenParkingSystem_WhenParkedAndModifiedHandicapSlot_ShouldWorkFine() {
+        ParkingManager parkingManager = new ParkingManager();
+        ParkingLot parkingLot0,parkingLot1,parkingLot2;
+        ParkingLot[] parkingLot = {
+                parkingLot0 = new ParkingLot(44 ,owner,0),
+                parkingLot1 = new ParkingLot(79,owner,0),
+                parkingLot2 = new ParkingLot(13,owner)
+        };
+        Object vehicle = new Object();
+        parkingManager.setNumberOfLots(parkingLot);
+        parkingManager.park(vehicle);
+        parkingManager.updateHandicapReservation(1,8);
+        parkingManager.unPark(vehicle);
+        parkingManager.park(vehicle,true);
+        String getHandicapVehicleLocation = parkingManager.getVehicleLocation(vehicle);
+        Assert.assertEquals( "Parking Lot: 1 Position: 0",getHandicapVehicleLocation);
+    }
 
 }

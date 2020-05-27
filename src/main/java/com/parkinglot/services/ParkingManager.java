@@ -82,7 +82,8 @@ public class ParkingManager {
         parkingLot = parkingLotArrayList.stream()
                 .filter(e -> e.isParked(vehicle))
                 .findFirst()
-                .orElse(getEvenlyDistributed(vehicle));
+                .orElse(null);
+
         parkingLot.unPark(vehicle);
     }
 
@@ -105,5 +106,8 @@ public class ParkingManager {
         throw new ParkingLotException("No such car parked!");
     }
 
+    public void updateHandicapReservation(int parkingLotNumber, int noOfSlots){
+        parkingLotArrayList.get(parkingLotNumber).setHandicapReservationSlot(noOfSlots);
+    }
 
 }

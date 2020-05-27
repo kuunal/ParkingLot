@@ -39,7 +39,7 @@ public class ParkingLot{
         if(handicapReservationSlot>capacity)
             throw new ParkingLotException("Reserve slots cannot exceed capacity!");
         this.handicapReservationSlot=handicapReservationSlot;
-        reserveForHandicap();
+        reserveForHandicap(0,handicapReservationSlot);
     }
 
     public void setCapacity(int capacity) {
@@ -90,7 +90,7 @@ public class ParkingLot{
         if(handicapReservationSlot>0)
         IntStream.range(0,handicapReservationSlot)
                 .forEach(e-> handicappedUnParking(vehicle,e));
-        if(isParked(vehicle)){
+        else if(isParked(vehicle)){
             vehicleList.remove(vehicle);
             inform.update(capacity-vehicleList.size());
         }else
@@ -100,8 +100,6 @@ public class ParkingLot{
     private void handicappedUnParking(Object vehicle,int index) {
         if(vehicleList.get(index)==vehicle) {
             vehicleList.set(index, null);
-            throw new ParkingLotException("Unparked vehicle for handicap");
-
         }
         if(index==handicapReservationSlot){
             throw new ParkingLotException("No such vehicle parked!");
@@ -122,13 +120,19 @@ public class ParkingLot{
         return owner.getTime(vehicle);
     }
 
-    public void reserveForHandicap(){
-        IntStream.range(0,handicapReservationSlot)
+    public void reserveForHandicap(int start,int end){
+        IntStream.range(start,handicapReservationSlot)
                 .forEach(e->vehicleList.add(null));
     }
 
     public int getIndexOfVehicle(Object vehicle){
         return vehicleList.indexOf(vehicle);
+    }
+
+    public void setHandicapReservationSlot(int reserveSlot){
+        this.handicapReservationSlot=reserveSlot;
+        if(handicapReservationSlot-vehicleList.size()>0)
+            reserveForHandicap(vehicleList.size(),handicapReservationSlot-vehicleList.size());
     }
 
 }
