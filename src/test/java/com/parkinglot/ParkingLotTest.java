@@ -197,6 +197,25 @@ public class ParkingLotTest {
     }
 
     @Test
+    public void givenVehicle_WhenUnparked_CreatesAVacantSpace_ForOtherVehicles() {
+        ParkingManager parkingManager = new ParkingManager();
+        ParkingLot parkingLot0;
+        ParkingLot[] parkingLot = {
+                parkingLot0 = new ParkingLot(44 ,owner)
+        };
+        Object vehicle = new Object();
+        Object vehicle2 = new Object();
+        Object vehicle3 = new Object();
+        parkingManager.setNumberOfLots(parkingLot);
+        parkingManager.park(vehicle);
+        parkingManager.park(vehicle2);
+        parkingManager.unPark(vehicle);
+        parkingManager.park(vehicle3);
+        String getLargeVehicleLocation = parkingManager.getVehicleLocation(vehicle3);
+        Assert.assertEquals( "Parking Lot: 0 Position: 0",getLargeVehicleLocation);
+    }
+
+    @Test
     public void givenParkedVehicle_WhenQueriedToFind_ReturnsLotAndPosition(){
         ParkingManager parkingManager = new ParkingManager();
         ParkingLot[] parkingLot = {
@@ -426,8 +445,8 @@ public class ParkingLotTest {
         parkingManager.setNumberOfLots(parkingLot);
         parkingManager.updateHandicapReservation(1,8);
         parkingManager.park(vehicle);
-        String getLargeVehicleLocation = parkingManager.getVehicleLocation(vehicle);
-        Assert.assertEquals( "Parking Lot: 1 Position: 8",getLargeVehicleLocation);
+        String getVehicleLocation = parkingManager.getVehicleLocation(vehicle);
+        Assert.assertEquals( "Parking Lot: 1 Position: 8",getVehicleLocation);
     }
 
     @Test

@@ -44,7 +44,7 @@ public class ParkingManager {
         if(isHandicapped.length>0&&isHandicapped[0]==true){
                 parkingLotArrayList.stream()
                         .filter(e->!isParked(vehicle))
-                        .forEach(e->e.handicappedParking(vehicle));
+                        .forEach(e->e.park(vehicle,true));
         }else {
             parkingLot = parkingLotArrayList.stream()
                     .filter(e -> e.isParked(vehicle))
@@ -83,7 +83,8 @@ public class ParkingManager {
                 .filter(e -> e.isParked(vehicle))
                 .findFirst()
                 .orElse(null);
-
+        if(parkingLot==null)
+            throw new ParkingLotException("No such vehicle parked!");
         parkingLot.unPark(vehicle);
     }
 

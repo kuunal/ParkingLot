@@ -17,18 +17,21 @@ public class ParkingLot{
 
     public ParkingLot(){
         this.capacity=99;
+        initSlots(0,capacity);
     }
 
     public ParkingLot(Owner owner){
         this.capacity=100;
         this.owner=owner;
         inform = new Inform(owner);
+        initSlots(0,capacity);
     }
 
     public ParkingLot(int capacity,ParkingSigns owner){
         this.capacity =capacity;
         this.owner=owner;
         inform = new Inform(owner);
+        initSlots(0,capacity);
     }
 
 
@@ -39,7 +42,7 @@ public class ParkingLot{
         if(handicapReservationSlot>capacity)
             throw new ParkingLotException("Reserve slots cannot exceed capacity!");
         this.handicapReservationSlot=handicapReservationSlot;
-        reserveForHandicap(0,handicapReservationSlot);
+        initSlots(0,capacity);
     }
 
     public void setCapacity(int capacity) {
@@ -52,32 +55,30 @@ public class ParkingLot{
     }
 
     public void park(Object vehicle,boolean ...isHandicapped) {
+        if(isParked(vehicle))
+            throw new ParkingLotException("Vehicle already parked!");
         if(isHandicapped.length>0&&isHandicapped[0]==true){
-            handicappedParking(vehicle);
-        }
+            parkVehicle(vehicle,0,handicapReservationSlot);
+        }else
+            parkVehicle(vehicle,handicapReservationSlot,capacity);
         owner.setTimeAndPayment(vehicle);
-        if(vehicleList.size()==capacity){
+        if(vehicleList.size()==capacity && !vehicleList.contains(null)){
             inform.update(capacity-vehicleList.size());
             throw new ParkingLotException("Parking lot full!");
         }
-        if(isParked(vehicle))
-            throw new ParkingLotException("Vehicle already parked!");
-        vehicleList.add(vehicle);
     }
 
-    public void handicappedParking(Object vehicle) {
-        if(handicapReservationSlot==0)
+    public void parkVehicle(Object vehicle, int start, int slots) {
+        if(slots==0)
             return;
-        IntStream.range(0,handicapReservationSlot)
+        IntStream.range(start,slots)
                 .filter(e->!isParked(vehicle))
-                .forEach(e->addVehicleInHandicappedReservation(vehicle,e));
+                .forEach(e-> addVehicleInList(vehicle,e));
     }
 
-    public void addVehicleInHandicappedReservation(Object vehicle, int index) {
+    public void addVehicleInList(Object vehicle, int index) {
         if(vehicleList.get(index)==null && !isParked(vehicle))
-                vehicleList.set(index,vehicle);
-        if (index == handicapReservationSlot)
-            throw new ParkingLotException("Reserved slots is full!");
+            vehicleList.set(index, vehicle);
     }
 
     public boolean isParked(Object vehicle) {
@@ -87,23 +88,20 @@ public class ParkingLot{
     }
 
     public void unPark(Object vehicle) {
-        if(handicapReservationSlot>0)
-        IntStream.range(0,handicapReservationSlot)
+        IntStream.range(0,capacity)
+                .filter(e->isParked(vehicle))
                 .forEach(e-> handicappedUnParking(vehicle,e));
-        else if(isParked(vehicle)){
-            vehicleList.remove(vehicle);
             inform.update(capacity-vehicleList.size());
-        }else
-            throw new ParkingLotException("No such vehicle parked!");
     }
 
     private void handicappedUnParking(Object vehicle,int index) {
+        if(index==capacity){
+            throw new ParkingLotException("No such vehicle parked!");
+        }
         if(vehicleList.get(index)==vehicle) {
             vehicleList.set(index, null);
         }
-        if(index==handicapReservationSlot){
-            throw new ParkingLotException("No such vehicle parked!");
-        }
+
     }
 
     public boolean isUnparked(Object vehicle){
@@ -113,15 +111,18 @@ public class ParkingLot{
     }
 
     public int getEmptySlots(){
-        return this.capacity-this.vehicleList.size()-this.handicapReservationSlot;
+        int total = (int) IntStream.range(0,vehicleList.size())
+                .filter(e->vehicleList.get(e)==null).count();
+        return total-handicapReservationSlot;
     }
+
 
     public String getTime(Object vehicle){
         return owner.getTime(vehicle);
     }
 
-    public void reserveForHandicap(int start,int end){
-        IntStream.range(start,handicapReservationSlot)
+    public void initSlots(int start, int end){
+        IntStream.range(start,end)
                 .forEach(e->vehicleList.add(null));
     }
 
@@ -131,8 +132,6 @@ public class ParkingLot{
 
     public void setHandicapReservationSlot(int reserveSlot){
         this.handicapReservationSlot=reserveSlot;
-        if(handicapReservationSlot-vehicleList.size()>0)
-            reserveForHandicap(vehicleList.size(),handicapReservationSlot-vehicleList.size());
     }
 
 }
