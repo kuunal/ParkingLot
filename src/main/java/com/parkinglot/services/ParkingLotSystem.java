@@ -11,7 +11,6 @@ public class ParkingLotSystem {
     public ArrayList<ParkingLot> parkingLotArrayList = new ArrayList<>();
     private int numberOfLots;
     ParkingLot parkingLot;
-    public enum fields{COLOR,TIME,SLOT,BRAND};
 
 
     public ParkingLotSystem(){
@@ -123,7 +122,6 @@ public class ParkingLotSystem {
     }
 
     public HashMap<Integer, List<Vehicle>> getVehicleInformation(String color, String model) {
-        ArrayList<String> list = new ArrayList<>();
         HashMap<Integer,List<Vehicle>> map = new HashMap<>();
         parkingLotArrayList.stream()
                 .filter(e->e.getVehicleInformation(color,model)!=null)
@@ -145,6 +143,16 @@ public class ParkingLotSystem {
 
         return list;
     }
-    
+
+
+    public ArrayList<Vehicle> getVehicleByTime(int minute){
+        ArrayList<Vehicle> list = new ArrayList<>();
+        for(int parkingLotIndex=0;parkingLotIndex<parkingLotArrayList.size();parkingLotIndex++){
+            list.addAll(parkingLotArrayList.get(parkingLotIndex)
+                    .getVehiclesByTime(minute));
+        }
+
+        return list;
+    }
 
 }

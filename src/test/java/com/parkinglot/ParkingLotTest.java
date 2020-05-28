@@ -271,7 +271,7 @@ public class ParkingLotTest {
         parkingLotSystem.park(vehicle);
         String time = parkingLotSystem.getTime(vehicle);
         LocalDateTime localDateTime = LocalDateTime.now();
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy hh:MM:ss");
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
         String expectedTime = localDateTime.format(dateTimeFormatter);
         Assert.assertEquals(expectedTime,time);
     }
@@ -529,6 +529,18 @@ public class ParkingLotTest {
         Assert.assertEquals("0 [1]",vehicleByBrandNameList.get(0));
     }
 
+
+    @Test
+    public void givenVehicle_WhenParkedBetweenGivenTime_ReturnsVehicle() throws InterruptedException {
+        ParkingLotSystem parkingLotSystem = new ParkingLotSystem();
+        Vehicle vehicle = new Vehicle("White","MH-1111","Toyota");
+        parkingLotSystem.setNumberOfLots(3,owner);
+        parkingLotSystem.park(vehicle);
+        ArrayList<Vehicle> expectedList =  new ArrayList<>();
+        expectedList.add(vehicle);
+        List vehicleByBrandNameList = parkingLotSystem.getVehicleByTime(30);
+        Assert.assertEquals(vehicle,vehicleByBrandNameList.get(0));
+    }
 
 
 

@@ -3,6 +3,9 @@ package com.parkinglot.services;
 import com.parkinglot.exceptions.ParkingLotException;
 import com.parkinglot.model.Vehicle;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -129,6 +132,7 @@ public class ParkingLot{
 
 
     public String getTime(Vehicle vehicle){
+
         return vehicle.getTime();
     }
 
@@ -169,6 +173,23 @@ public class ParkingLot{
                 .filter(e->e.getBrand().toLowerCase().equals(brandName.toLowerCase()))
                 .map(e->e.getSlot())
                 .collect(Collectors.toList());
+    }
+
+    public List<Vehicle> getVehiclesByTime(int minutes){
+        return vehicleList.stream()
+                .filter(e->e!=null)
+                .filter(e->calculateTimes(e.getTime(),minutes))
+                .collect(Collectors.toList());
+    }
+
+    private boolean calculateTimes(String time, int minutes) {
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+        LocalDateTime parkedTime = LocalDateTime.parse(time,dateTimeFormatter);
+        LocalDateTime currentTime = LocalDateTime.now();
+        if(currentTime.compareTo(parkedTime)>0){
+            return true;
+        }
+        return false;
     }
 
 

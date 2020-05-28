@@ -15,10 +15,6 @@ public class Vehicle {
         this.time=setTime();
     }
 
-    public Vehicle(String color){
-        this.color=color;
-        this.time=setTime();
-    }
 
     public Vehicle(String color, String numberPlate,String brand){
         this.color=color;
@@ -28,9 +24,9 @@ public class Vehicle {
     }
 
 
-    public String setTime(){
+    public static String setTime(){
         LocalDateTime localDateTime=LocalDateTime.now();
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy hh:MM:ss");
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
         return localDateTime.format(dateTimeFormatter);
     }
 
