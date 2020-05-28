@@ -1,16 +1,22 @@
-package com.parkinglot.models;
+package com.parkinglot.model;
 
 import com.parkinglot.services.ParkingSigns;
 
+import java.util.ArrayList;
+
 public class AirportSecurityClass implements ParkingSigns {
-    ParkingSigns.signs sign;
+    signs sign;
 
     @Override
-    public void getState(ParkingSigns.signs sign) {
+    public void getState(signs sign) {
         this.sign=sign;
     }
 
-    public ParkingSigns.signs getSign() {
+    public signs getSign() {
         return this.sign;
     }
+
+
+
+
 }

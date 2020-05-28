@@ -1,9 +1,10 @@
-package com.parkinglot.models;
+package com.parkinglot.model;
 
 import com.parkinglot.services.ParkingSigns;
 
-public class OwnerClass implements ParkingSigns {
+import java.util.ArrayList;
 
+public class Owner implements ParkingSigns {
     signs sign;
 
     @Override
@@ -14,4 +15,7 @@ public class OwnerClass implements ParkingSigns {
     public signs getSign() {
         return this.sign;
     }
+
+
+
 }
