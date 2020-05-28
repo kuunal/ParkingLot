@@ -12,13 +12,11 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.lang.reflect.Array;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class ParkingLotTest {
     Owner owner;
@@ -461,11 +459,11 @@ public class ParkingLotTest {
     @Test
     public void givenVehicleColor_WhenFound_ReturnsLocation(){
         ParkingLotSystem parkingLotSystem = new ParkingLotSystem();
-        Vehicle vehicle = new Vehicle("Black");
-        Vehicle vehicle3 = new Vehicle("White");
-        Vehicle vehicle2 = new Vehicle("White");
-        Vehicle vehicle4 = new Vehicle("White");
-        Vehicle vehicle5 = new Vehicle("White");
+        Vehicle vehicle = new Vehicle("Black","MH-1111","Toyota");
+        Vehicle vehicle2 = new Vehicle("White","MH-2222","Mercedes");
+        Vehicle vehicle3 = new Vehicle("White","MH-4444","Toyota");
+        Vehicle vehicle4 = new Vehicle("White","MH-3333","BMW");
+        Vehicle vehicle5 = new Vehicle("White","MH-9999","Audi");
         parkingLotSystem.setNumberOfLots(3,owner,5);
         parkingLotSystem.park(vehicle);
         parkingLotSystem.park(vehicle2);
@@ -493,11 +491,11 @@ public class ParkingLotTest {
         parkingLotSystem.park(vehicle3);
         parkingLotSystem.park(vehicle4);
         HashMap<Integer,List<Vehicle>> expectedList = parkingLotSystem.getVehicleInformation("blue","toyota");
-        Assert.assertEquals("Toyota",expectedList.get(2).get(0).getModel());
+        Assert.assertEquals("Toyota",expectedList.get(2).get(0).getBrand());
     }
 
     @Test
-    public void givenUnparkedVehicle_WhenForQuery_ShouldReturnDetailsAboutVehicle(){
+    public void givenUnparkedVehicle_WhenForQuery_ThrowsException(){
         ParkingLotSystem parkingLotSystem = new ParkingLotSystem();
         try {
             Vehicle vehicle = new Vehicle("White","MH-1111","Toyota");
@@ -514,6 +512,23 @@ public class ParkingLotTest {
             Assert.assertEquals("No such car parked!", e.getMessage());
         }
     }
+
+    @Test
+    public void givenVehicleBrand_WhenFound_ReturnsLocation(){
+        ParkingLotSystem parkingLotSystem = new ParkingLotSystem();
+        Vehicle vehicle = new Vehicle("White","MH-1111","Toyota");
+        Vehicle vehicle2 = new Vehicle("Black","MH-2222","Mercedes");
+        Vehicle vehicle3 = new Vehicle("Blue","MH-4444","Toyota");
+        Vehicle vehicle4 = new Vehicle("Black","MH-3333","BMW");
+        parkingLotSystem.setNumberOfLots(3,owner,5);
+        parkingLotSystem.park(vehicle);
+        parkingLotSystem.park(vehicle2);
+        parkingLotSystem.park(vehicle3);
+        parkingLotSystem.park(vehicle4);
+        List vehicleByBrandNameList = parkingLotSystem.getLocationByBrand("BMW");
+        Assert.assertEquals("0 [1]",vehicleByBrandNameList.get(0));
+    }
+
 
 
 

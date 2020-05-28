@@ -11,7 +11,6 @@ public class ParkingLot{
     int capacity;
     ArrayList<Vehicle> vehicleList = new ArrayList();
     Inform inform;
-    Vehicle vehicle = new Vehicle();
     int handicapReservationSlot;
 
     public ParkingLot(){
@@ -159,10 +158,19 @@ public class ParkingLot{
         return vehicleList.stream()
                 .filter(e->e!=null)
                 .filter(e->e.getColor().toLowerCase().equals(color))
-                .filter(e->e.getModel().toLowerCase().equals(model))
+                .filter(e->e.getBrand().toLowerCase().equals(model))
                 .collect(Collectors.toList());
 
     }
+
+    public List<Integer> getVehiclesByBrand(String brandName){
+        return vehicleList.stream()
+                .filter(e->e!=null)
+                .filter(e->e.getBrand().toLowerCase().equals(brandName.toLowerCase()))
+                .map(e->e.getSlot())
+                .collect(Collectors.toList());
+    }
+
 
 }
 

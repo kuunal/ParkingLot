@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.parkinglot.ParkingLotTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2020-05-28T05:27:31" hostname="DESKTOP-196HMRI" time="0.043">
+<testsuite name="com.parkinglot.ParkingLotTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2020-05-28T07:07:07" hostname="DESKTOP-196HMRI" time="0.065">
   <properties/>
-  <testcase name="givenUnparkedVehicle_WhenForQuery_ShouldReturnDetailsAboutVehicle" classname="com.parkinglot.ParkingLotTest" time="0.043"/>
+  <testcase name="givenVehicleBrand_WhenFound_ReturnsLocation" classname="com.parkinglot.ParkingLotTest" time="0.065"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

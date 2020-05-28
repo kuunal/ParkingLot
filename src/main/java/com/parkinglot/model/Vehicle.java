@@ -8,9 +8,8 @@ public class Vehicle {
     String color;
     String time;
     int slot;
-    int lotIndex;
     String numberPlate;
-    String model;
+    String brand;
 
     public Vehicle(){
         this.time=setTime();
@@ -21,11 +20,11 @@ public class Vehicle {
         this.time=setTime();
     }
 
-    public Vehicle(String color, String numberPlate,String model){
+    public Vehicle(String color, String numberPlate,String brand){
         this.color=color;
         this.time=setTime();
         this.numberPlate=numberPlate;
-        this.model=model;
+        this.brand = brand;
     }
 
 
@@ -51,19 +50,12 @@ public class Vehicle {
         return numberPlate;
     }
 
-    public String getModel() {
-        return model;
+    public String getBrand() {
+        return brand;
     }
 
     public void setSlot(int slot) {
         this.slot = slot;
     }
 
-    public void setLotIndex(int lotIndex) {
-        this.lotIndex = lotIndex;
-    }
-
-    public int getLotIndex() {
-        return lotIndex;
-    }
 }

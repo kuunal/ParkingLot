@@ -11,6 +11,8 @@ public class ParkingLotSystem {
     public ArrayList<ParkingLot> parkingLotArrayList = new ArrayList<>();
     private int numberOfLots;
     ParkingLot parkingLot;
+    public enum fields{COLOR,TIME,SLOT,BRAND};
+
 
     public ParkingLotSystem(){
         this.numberOfLots=1;
@@ -133,5 +135,16 @@ public class ParkingLotSystem {
             throw new ParkingLotException("No such car parked!");
         return map;
     }
+
+    public ArrayList<String> getLocationByBrand(String brandName){
+        ArrayList<String> list = new ArrayList<>();
+        for(int parkingLotIndex=0;parkingLotIndex<parkingLotArrayList.size();parkingLotIndex++){
+            list.add(parkingLotIndex+" "+parkingLotArrayList.get(parkingLotIndex)
+                    .getVehiclesByBrand(brandName));
+        }
+
+        return list;
+    }
+    
 
 }
