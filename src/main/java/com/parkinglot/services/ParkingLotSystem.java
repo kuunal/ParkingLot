@@ -4,9 +4,7 @@ import com.parkinglot.exceptions.ParkingLotException;
 import com.parkinglot.model.Owner;
 import com.parkinglot.model.Vehicle;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.*;
 import java.util.stream.IntStream;
 
 public class ParkingLotSystem {
@@ -43,11 +41,11 @@ public class ParkingLotSystem {
         return parkingLotArrayList.size();
     }
 
-    public void park(Vehicle vehicle, boolean... isHandicapped){
-        if(isHandicapped.length>0&&isHandicapped[0]==true){
+    public void park(Vehicle vehicle, Reservation... reservationType){
+        if(reservationType.length>0 && reservationType[0].equals(Reservation.HANDICAP)){
                 parkingLotArrayList.stream()
                         .filter(e->!isParked(vehicle))
-                        .forEach(e->e.park(vehicle,true));
+                        .forEach(e->e.park(vehicle,reservationType));
         }else {
             parkingLot = parkingLotArrayList.stream()
                     .filter(e -> e.isParked(vehicle))
@@ -69,10 +67,9 @@ public class ParkingLotSystem {
 
     public ParkingLot getEvenlyDistributed(Vehicle vehicle){
         int maximumSlotsLot = parkingLotArrayList.get(0).getEmptySlots();
-        parkingLot = parkingLotArrayList.get(0);
-        parkingLotArrayList.stream()
-                .filter(e->e.getEmptySlots()>maximumSlotsLot)
-                .forEach(e->getLotToPark(e,e.getEmptySlots(),maximumSlotsLot));
+        parkingLot = parkingLotArrayList.stream()
+                .max(Comparator.comparing(e->e.getEmptySlots()))
+                .orElse(parkingLotArrayList.get(0));
         return parkingLot;
     }
 
@@ -114,12 +111,27 @@ public class ParkingLotSystem {
         parkingLotArrayList.get(parkingLotNumber).setHandicapReservationSlot(noOfSlots);
     }
 
-    public List<Integer> getLocationByColor(String color){
-        List<Integer> list = new ArrayList<>();
-        for(ParkingLot parkingLot : parkingLotArrayList){
-            list.addAll(parkingLot.getVehiclesByColor(color));
+    public ArrayList<String> getLocationByColor(String color){
+        ArrayList<String> list = new ArrayList<>();
+        for(int parkingLotIndex=0;parkingLotIndex<parkingLotArrayList.size();parkingLotIndex++){
+            list.add(parkingLotIndex+" "+parkingLotArrayList.get(parkingLotIndex)
+                    .getVehiclesByColor(color));
         }
         return list;
+    }
+
+    public HashMap<Integer, List<Vehicle>> getVehicleInformation(String color, String model) {
+        ArrayList<String> list = new ArrayList<>();
+        HashMap<Integer,List<Vehicle>> map = new HashMap<>();
+        parkingLotArrayList.stream()
+                .filter(e->e.getVehicleInformation(color,model)!=null)
+                .forEach(e->map.put(parkingLotArrayList.indexOf(e),e.getVehicleInformation(color,model)));
+        if(map.values().stream()
+                .filter(e->e.size()>0)
+                .findFirst()
+                .orElse(null)==null)
+            throw new ParkingLotException("No such car parked!");
+        return map;
     }
 
 }

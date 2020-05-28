@@ -7,13 +7,18 @@ import com.parkinglot.model.Vehicle;
 import com.parkinglot.services.ParkingLot;
 import com.parkinglot.services.ParkingLotSystem;
 import com.parkinglot.services.ParkingSigns;
+import com.parkinglot.services.Reservation;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.lang.reflect.Array;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ParkingLotTest {
     Owner owner;
@@ -112,15 +117,16 @@ public class ParkingLotTest {
     public void givenParkingLot_WhenUnparked_AndHasSpaceAgain_InformsOwner() {
         Owner owner = new Owner();
         Vehicle car = new Vehicle();
+        Vehicle car2 = new Vehicle();
         ParkingLot parkingLot = new ParkingLot();
         try {
             parkingLot.setUser(owner);
             parkingLot.setCapacity(1);
             parkingLot.park(car);
-            parkingLot.unPark(car);
+            parkingLot.park(car2);
         } catch (ParkingLotException e) {
             Assert.assertEquals(Owner.signs.PARKING_FULL, owner.getSign());
-            parkingLot.unPark(car);
+            parkingLot.unPark(car2);
             Assert.assertEquals(ParkingSigns.signs.PARKING_AVAILABLE, owner.getSign());
         }
     }
@@ -304,8 +310,8 @@ public class ParkingLotTest {
         Vehicle vehicle2 = new Vehicle();
         Vehicle vehicle1 = new Vehicle();
         parkingLotSystem.setNumberOfLots(parkingLot);
-        parkingLotSystem.park(vehicle1,true);
-        parkingLotSystem.park(vehicle2,true);
+        parkingLotSystem.park(vehicle1,Reservation.HANDICAP);
+        parkingLotSystem.park(vehicle2,Reservation.HANDICAP);
         String firstVehilceLocation = parkingLotSystem.getVehicleLocation(vehicle1);
         String secondVehilceLocation = parkingLotSystem.getVehicleLocation(vehicle2);
         Assert.assertEquals("Parking Lot: 0 Position: 0"+"  "+"Parking Lot: 0 Position: 1",
@@ -325,8 +331,8 @@ public class ParkingLotTest {
         Vehicle vehicle2 = new Vehicle();
         Vehicle vehicle1 = new Vehicle();
         parkingLotSystem.setNumberOfLots(parkingLot);
-        parkingLotSystem.park(vehicle1,true);
-        parkingLotSystem.park(vehicle2,true);
+        parkingLotSystem.park(vehicle1,Reservation.HANDICAP);
+        parkingLotSystem.park(vehicle2,Reservation.HANDICAP);
         Assert.assertFalse(parkingLot2.isParked(vehicle2)&&parkingLot2.isParked(vehicle1));
     }
 
@@ -341,8 +347,8 @@ public class ParkingLotTest {
                 parkingLot2 = new ParkingLot(10,owner,3)
         };
         parkingLotSystem.setNumberOfLots(parkingLot);
-        parkingLotSystem.park(vehicle1,true);
-        parkingLotSystem.park(vehicle2,true);
+        parkingLotSystem.park(vehicle1,Reservation.HANDICAP);
+        parkingLotSystem.park(vehicle2,Reservation.HANDICAP);
         Assert.assertTrue(!parkingLot1.isParked(vehicle1) && !parkingLot1.isParked(vehicle2) &&
                 parkingLot2.isParked(vehicle1) && parkingLot2.isParked(vehicle2));
 
@@ -359,8 +365,8 @@ public class ParkingLotTest {
                 parkingLot2 = new ParkingLot(10,owner,3)
         };
         parkingLotSystem.setNumberOfLots(parkingLot);
-        parkingLotSystem.park(vehicle1,true);
-        parkingLotSystem.park(vehicle2,true);
+        parkingLotSystem.park(vehicle1,Reservation.HANDICAP);
+        parkingLotSystem.park(vehicle2,Reservation.HANDICAP);
         Assert.assertTrue(parkingLot1.isParked(vehicle1) && parkingLot2.isParked(vehicle2) &&
                 !parkingLot2.isParked(vehicle1) && !parkingLot1.isParked(vehicle2) );
 
@@ -378,8 +384,8 @@ public class ParkingLotTest {
                     parkingLot2 = new ParkingLot(10,owner,3)
             };
             parkingLotSystem.setNumberOfLots(parkingLot);
-            parkingLotSystem.park(vehicle1,true);
-            parkingLotSystem.park(vehicle2,true);
+            parkingLotSystem.park(vehicle1,Reservation.HANDICAP);
+            parkingLotSystem.park(vehicle2,Reservation.HANDICAP);
             parkingLotSystem.unPark(vehicle2);
             Assert.assertTrue(parkingLotSystem.isUnparked(vehicle2));
     }
@@ -447,25 +453,68 @@ public class ParkingLotTest {
         parkingLotSystem.park(vehicle);
         parkingLotSystem.updateHandicapReservation(1,8);
         parkingLotSystem.unPark(vehicle);
-        parkingLotSystem.park(vehicle,true);
+        parkingLotSystem.park(vehicle, Reservation.HANDICAP);
         String getHandicapVehicleLocation = parkingLotSystem.getVehicleLocation(vehicle);
         Assert.assertEquals( "Parking Lot: 1 Position: 0",getHandicapVehicleLocation);
     }
 
     @Test
-    public void givenVehicle_WhenWithColor_ReturnsLocation(){
+    public void givenVehicleColor_WhenFound_ReturnsLocation(){
         ParkingLotSystem parkingLotSystem = new ParkingLotSystem();
-        Vehicle vehicle = new Vehicle("White");
-        Vehicle vehicle2 = new Vehicle("Black");
-        Vehicle vehicle3 = new Vehicle("Black");
+        Vehicle vehicle = new Vehicle("Black");
+        Vehicle vehicle3 = new Vehicle("White");
+        Vehicle vehicle2 = new Vehicle("White");
         Vehicle vehicle4 = new Vehicle("White");
+        Vehicle vehicle5 = new Vehicle("White");
         parkingLotSystem.setNumberOfLots(3,owner,5);
         parkingLotSystem.park(vehicle);
         parkingLotSystem.park(vehicle2);
         parkingLotSystem.park(vehicle3);
         parkingLotSystem.park(vehicle4);
-        List list = parkingLotSystem.getLocationByColor("white");
-        Assert.assertEquals("0 0",list.get(0)+" "+list.get(1));
+        parkingLotSystem.park(vehicle5);
+        List vehicleByColorList = parkingLotSystem.getLocationByColor("white");
+        ArrayList expectedList = new ArrayList();
+        expectedList.add("0 [1]");
+        expectedList.add("1 [0, 1]");
+        expectedList.add("2 [0]");
+        Assert.assertEquals(expectedList,vehicleByColorList);
     }
+
+    @Test
+    public void givenVehicle_WhenForQuery_ShouldReturnDetailsAboutVehicle(){
+        ParkingLotSystem parkingLotSystem = new ParkingLotSystem();
+        Vehicle vehicle = new Vehicle("White","MH-1111","Toyota");
+        Vehicle vehicle2 = new Vehicle("Black","MH-2222","Mercedes");
+        Vehicle vehicle3 = new Vehicle("Blue","MH-4444","Toyota");
+        Vehicle vehicle4 = new Vehicle("Black","MH-3333","BMW");
+        parkingLotSystem.setNumberOfLots(3,owner,5);
+        parkingLotSystem.park(vehicle);
+        parkingLotSystem.park(vehicle2);
+        parkingLotSystem.park(vehicle3);
+        parkingLotSystem.park(vehicle4);
+        HashMap<Integer,List<Vehicle>> expectedList = parkingLotSystem.getVehicleInformation("blue","toyota");
+        Assert.assertEquals("Toyota",expectedList.get(2).get(0).getModel());
+    }
+
+    @Test
+    public void givenUnparkedVehicle_WhenForQuery_ShouldReturnDetailsAboutVehicle(){
+        ParkingLotSystem parkingLotSystem = new ParkingLotSystem();
+        try {
+            Vehicle vehicle = new Vehicle("White","MH-1111","Toyota");
+            Vehicle vehicle2 = new Vehicle("Black","MH-2222","Mercedes");
+            Vehicle vehicle3 = new Vehicle("Blue","MH-4444","Toyota");
+            Vehicle vehicle4 = new Vehicle("Black","MH-3333","BMW");
+            parkingLotSystem.setNumberOfLots(3,owner,5);
+            parkingLotSystem.park(vehicle);
+            parkingLotSystem.park(vehicle2);
+            parkingLotSystem.park(vehicle3);
+            parkingLotSystem.park(vehicle4);
+            HashMap<Integer,List<Vehicle>> expectedList = parkingLotSystem.getVehicleInformation("blue","Lambo");
+        }catch (ParkingLotException e) {
+            Assert.assertEquals("No such car parked!", e.getMessage());
+        }
+    }
+
+
 
 }

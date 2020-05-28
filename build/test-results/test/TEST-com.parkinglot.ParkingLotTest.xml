@@ -1,33 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.parkinglot.ParkingLotTest" tests="27" skipped="0" failures="0" errors="0" timestamp="2020-05-27T17:18:28" hostname="DESKTOP-196HMRI" time="0.266">
+<testsuite name="com.parkinglot.ParkingLotTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2020-05-28T05:27:31" hostname="DESKTOP-196HMRI" time="0.043">
   <properties/>
-  <testcase name="givenVehicleOfHandicapped_WhenToParkInReservation_ReturnsTrue" classname="com.parkinglot.ParkingLotTest" time="0.088"/>
-  <testcase name="givenVehicles_WhenToPark_ShouldParkEvenly" classname="com.parkinglot.ParkingLotTest" time="0.026"/>
-  <testcase name="givenHandicapped_WhenUnParked_ReturnsTrue" classname="com.parkinglot.ParkingLotTest" time="0.006"/>
-  <testcase name="givenVehicle_WhenToPark_ShouldParkInLot_WithMostEmptySlots" classname="com.parkinglot.ParkingLotTest" time="0.002"/>
-  <testcase name="givenParkingSystem_WhenParkedAndModifiedHandicapSlot_ShouldWorkFine" classname="com.parkinglot.ParkingLotTest" time="0.003"/>
-  <testcase name="givenParkingSystem_WhenModifiedHandicapSlot_ShouldWorkFine" classname="com.parkinglot.ParkingLotTest" time="0.001"/>
-  <testcase name="givenParkedVehicle_WhenQueriedToFind_ReturnsLotAndPosition" classname="com.parkinglot.ParkingLotTest" time="0.002"/>
-  <testcase name="givenCarToPark_WhenLotIsFull_InformsAirportSecurity" classname="com.parkinglot.ParkingLotTest" time="0.018"/>
-  <testcase name="givenVehicle_WhenUnparked_CreatesAVacantSpace_ForOtherVehicles" classname="com.parkinglot.ParkingLotTest" time="0.001"/>
-  <testcase name="givenVehicleOfHandicapped_WhenToParkInDifferentSlot_ReturnsTrue" classname="com.parkinglot.ParkingLotTest" time="0.003"/>
-  <testcase name="givenVehicle_WhenWithColor_ReturnsLocation" classname="com.parkinglot.ParkingLotTest" time="0.011"/>
-  <testcase name="givenCarToPark_WhenLotIsFull_InformsOwner" classname="com.parkinglot.ParkingLotTest" time="0.006"/>
-  <testcase name="givenUnParkedVehicleToUnPark_WhenInParkingManager_ThrowsException" classname="com.parkinglot.ParkingLotTest" time="0.004"/>
-  <testcase name="givenUnparkedCar_WhenToUnpark_ThrowsException" classname="com.parkinglot.ParkingLotTest" time="0.003"/>
-  <testcase name="givenUnParkedVehicle_WhenToFind_ThrowsException" classname="com.parkinglot.ParkingLotTest" time="0.003"/>
-  <testcase name="givenSameVehicle_WhenToPark_InDifferentLot_ThrowsException" classname="com.parkinglot.ParkingLotTest" time="0.004"/>
-  <testcase name="givenLargeVehicle_WhenToPark_ShouldParkInLotWithMostFreeSpace_WithoutaffectingReservation" classname="com.parkinglot.ParkingLotTest" time="0.003"/>
-  <testcase name="givenDriver_WhenUnparksCar_ReturnsTrue" classname="com.parkinglot.ParkingLotTest" time="0.0"/>
-  <testcase name="givenLargeVehicle_WhenToPark_ShouldParkInLotWithMostFreeSpace" classname="com.parkinglot.ParkingLotTest" time="0.0"/>
-  <testcase name="givenVehicle_WhenToPark_ShouldReturnTime" classname="com.parkinglot.ParkingLotTest" time="0.007"/>
-  <testcase name="givenVehicle_WhenToPark_ReturnsTrue" classname="com.parkinglot.ParkingLotTest" time="0.001"/>
-  <testcase name="givenParkedVehicle_WhenToPark_ThrowsException" classname="com.parkinglot.ParkingLotTest" time="0.013"/>
-  <testcase name="givenParkingLot_WhenUnparked_AndHasSpaceAgain_InformsOwner" classname="com.parkinglot.ParkingLotTest" time="0.004"/>
-  <testcase name="givenMultipleHandicap_WhenOneLotIsFull_ShouldRedirectToAnother" classname="com.parkinglot.ParkingLotTest" time="0.003"/>
-  <testcase name="givenHandicap_WhenToParkAtDifferentLot_ShouldNotBeKnownToOtherLots" classname="com.parkinglot.ParkingLotTest" time="0.002"/>
-  <testcase name="givenNumberOfLots_WhenLoaded_ReturnsTrue" classname="com.parkinglot.ParkingLotTest" time="0.002"/>
-  <testcase name="givenParkedVehicleToUnPark_WhenInParkingManager_ReturnsTrue" classname="com.parkinglot.ParkingLotTest" time="0.005"/>
+  <testcase name="givenUnparkedVehicle_WhenForQuery_ShouldReturnDetailsAboutVehicle" classname="com.parkinglot.ParkingLotTest" time="0.043"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

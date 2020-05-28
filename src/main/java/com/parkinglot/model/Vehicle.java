@@ -1,18 +1,16 @@
 package com.parkinglot.model;
 
-import java.lang.reflect.Array;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Objects;
 
 public class Vehicle {
 
     String color;
-    int parkingCharges;
-    Object vehicle;
     String time;
     int slot;
+    int lotIndex;
+    String numberPlate;
+    String model;
 
     public Vehicle(){
         this.time=setTime();
@@ -23,11 +21,11 @@ public class Vehicle {
         this.time=setTime();
     }
 
-    public Vehicle(Object vehicle, int... charges){
-        this.vehicle = vehicle;
+    public Vehicle(String color, String numberPlate,String model){
+        this.color=color;
         this.time=setTime();
-        if(charges.length>0)
-            parkingCharges = charges[0];
+        this.numberPlate=numberPlate;
+        this.model=model;
     }
 
 
@@ -49,8 +47,23 @@ public class Vehicle {
         return this.color;
     }
 
+    public String getNumberPlate() {
+        return numberPlate;
+    }
+
+    public String getModel() {
+        return model;
+    }
+
     public void setSlot(int slot) {
         this.slot = slot;
     }
 
+    public void setLotIndex(int lotIndex) {
+        this.lotIndex = lotIndex;
+    }
+
+    public int getLotIndex() {
+        return lotIndex;
+    }
 }

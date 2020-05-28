@@ -3,15 +3,12 @@ package com.parkinglot.services;
 import com.parkinglot.exceptions.ParkingLotException;
 import com.parkinglot.model.Vehicle;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class ParkingLot{
     int capacity;
-    ParkingSigns owner;
     ArrayList<Vehicle> vehicleList = new ArrayList();
     Inform inform;
     Vehicle vehicle = new Vehicle();
@@ -24,14 +21,12 @@ public class ParkingLot{
 
     public ParkingLot(ParkingSigns owner){
         this.capacity=100;
-        this.owner=owner;
         inform = new Inform(owner);
         initSlots(0,capacity);
     }
 
     public ParkingLot(int capacity,ParkingSigns owner){
         this.capacity =capacity;
-        this.owner=owner;
         inform = new Inform(owner);
         initSlots(0,capacity);
     }
@@ -39,7 +34,6 @@ public class ParkingLot{
 
     public ParkingLot(int capacity,ParkingSigns owner,int handicapReservationSlot){
         this.capacity =capacity;
-        this.owner=owner;
         inform = new Inform(owner);
         if(handicapReservationSlot>capacity)
             throw new ParkingLotException("Reserve slots cannot exceed capacity!");
@@ -68,18 +62,17 @@ public class ParkingLot{
     }
 
     public void setUser(ParkingSigns owner){
-        this.owner=owner;
         inform = new Inform(owner);
     }
 
-    public void park(Vehicle vehicle,boolean ...isHandicapped) {
+    public void park(Vehicle vehicle,Reservation ...reservationType) {
         if(isParked(vehicle))
             throw new ParkingLotException("Vehicle already parked!");
         if(vehicleList.size()==capacity && !vehicleList.contains(null)){
             inform.update(capacity-vehicleList.size());
             throw new ParkingLotException("Parking lot full!");
         }
-        if(isHandicapped.length>0&&isHandicapped[0]==true){
+        if(reservationType.length>0&&reservationType[0].equals(Reservation.HANDICAP)){
             parkVehicle(vehicle,0,handicapReservationSlot);
         }else
             parkVehicle(vehicle,handicapReservationSlot,capacity);
@@ -97,6 +90,7 @@ public class ParkingLot{
     public void addVehicleInList(Vehicle vehicle, int index) {
         if(vehicleList.get(index)==null && !isParked(vehicle))
             vehicleList.set(index, vehicle);
+        vehicle.setSlot(getIndexOfVehicle(vehicle));
     }
 
     public boolean isParked(Vehicle vehicle) {
@@ -109,7 +103,7 @@ public class ParkingLot{
         IntStream.range(0,capacity)
                 .filter(e->isParked(vehicle))
                 .forEach(e-> removingFromList(vehicle,e));
-            inform.update(capacity-vehicleList.size());
+            inform.update(1);
     }
 
     private void removingFromList(Vehicle vehicle, int index) {
@@ -159,6 +153,15 @@ public class ParkingLot{
                 .filter(e->e.getColor().toLowerCase().equals(color))
                 .map(e->e.getSlot())
                 .collect(Collectors.toList());
+    }
+
+    public List<Vehicle> getVehicleInformation(String color, String model){
+        return vehicleList.stream()
+                .filter(e->e!=null)
+                .filter(e->e.getColor().toLowerCase().equals(color))
+                .filter(e->e.getModel().toLowerCase().equals(model))
+                .collect(Collectors.toList());
+
     }
 
 }
