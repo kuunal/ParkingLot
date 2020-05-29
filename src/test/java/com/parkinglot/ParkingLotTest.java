@@ -555,4 +555,18 @@ public class ParkingLotTest {
             Assert.assertEquals("Cant assign that much row for few slots!",e.getMessage());
         }
     }
+
+    @Test
+    public void givenParkedVehicle_WhenToFind_ReturnsAllInformation_AboutVehicles(){
+        ParkingLotSystem parkingLotSystem = new ParkingLotSystem();
+        parkingLotSystem.setNumberOfLots(2,owner,5);
+        IntStream.range(0,10)
+                .forEach(e->parkingLotSystem
+                        .park(new Vehicle("black",String.valueOf(e),"BMW")) );
+        HashMap<Integer,List<Vehicle>> map = parkingLotSystem.getAllVehicles();
+        Assert.assertEquals(10,map.values()
+                                                .stream()
+                                                .mapToInt(List::size)
+                                                .sum());
+    }
 }

@@ -1,3 +1,9 @@
+/*******************************************************************
+ * @Purpose : To park, unpark and give information to parking system.
+ * @Author : Kunal Deshmukh
+ * @Date : 28-05-2020
+ * *****************************************************************/
+
 package com.parkinglot.services;
 
 import com.parkinglot.exceptions.ParkingLotException;
@@ -18,23 +24,37 @@ public class ParkingLot{
     Inform inform;
     int handicapReservationSlot;
 
+    /**+
+     * @purpose initialize parking lot without owner and with default capacity.
+     */
     public ParkingLot(){
         this.capacity=99;
         initSlots(0,capacity);
     }
 
+
+    /**+
+     * @purpose initialize parking lot with specified owner and with default capacity.
+     */
     public ParkingLot(ParkingSigns owner){
         this.capacity=100;
         inform = new Inform(owner);
         initSlots(0,capacity);
     }
 
+    /**+
+     * @purpose initialize parking lot with specified owner and with specified capacity.
+     */
     public ParkingLot(int capacity,ParkingSigns owner){
         this.capacity =capacity;
         inform = new Inform(owner);
         initSlots(0,capacity);
     }
 
+    /**+
+     * @purpose initialize parking lot with specified owner and with default capacity
+     * and speified number of reservation slot.
+     */
 
     public ParkingLot(int capacity,ParkingSigns owner,int handicapReservationSlot){
         this.capacity =capacity;
@@ -45,6 +65,10 @@ public class ParkingLot{
         initSlots(0,capacity);
     }
 
+    /**+
+     * @purpose sets or update capacity. Update will work only if
+     * while decreasing size the vehicle should not have been parked.
+     */
     public void setCapacity(int capacity) {
         this.capacity = capacity;
 
@@ -69,6 +93,11 @@ public class ParkingLot{
         inform = new Inform(owner);
     }
 
+    /**+
+     * @purpose To park vehicle based on reservation.
+     * @param vehicle to park.
+     * @param reservationType to decide the slots.
+     */
     public void park(Vehicle vehicle,Reservation ...reservationType) {
         if(isParked(vehicle))
             throw new ParkingLotException("Vehicle already parked!");
@@ -83,6 +112,12 @@ public class ParkingLot{
 
     }
 
+    /**+
+     * @purpose To park vehicle based on reservation.
+     * @param vehicle to park.
+     * @param start start position of slot.
+     * @param slots end position of slot to park on.
+     */
     public void parkVehicle(Vehicle vehicle, int start, int slots) {
         if(slots==0)
             return;
@@ -91,6 +126,11 @@ public class ParkingLot{
                 .forEach(e-> addVehicleInList(vehicle,e));
     }
 
+    /**+
+     * @purpose  To add vehicle in list which will indicate vehicle as parked.
+     * @param vehicle
+     * @param index of list to store vehicle.
+     */
     public void addVehicleInList(Vehicle vehicle, int index) {
         if(vehicleList.get(index)==null && !isParked(vehicle))
             vehicleList.set(index, vehicle);
@@ -103,6 +143,10 @@ public class ParkingLot{
         return false;
     }
 
+    /**+
+     * @purpose To unpark vehicle and inform owner about empty slot.
+     * @param vehicle
+     */
     public void unPark(Vehicle vehicle) {
         IntStream.range(0,capacity)
                 .filter(e->isParked(vehicle))
@@ -110,6 +154,11 @@ public class ParkingLot{
             inform.update(1);
     }
 
+    /**+
+     * @purpose To remove vehicle from list indicating vehicle as unparked.
+     * @param vehicle to be removed.
+     * @param index where it is stored and to make it null.
+     */
     private void removingFromList(Vehicle vehicle, int index) {
         if(index==capacity){
             throw new ParkingLotException("No such vehicle parked!");
@@ -126,33 +175,59 @@ public class ParkingLot{
         return true;
     }
 
+    /**+
+     * @purpose To return empty slots for parking system to decide further parking of vehicles.
+     * @return Empty slots for normal type.
+     */
     public int getEmptySlots(){
         int total = (int) IntStream.range(0,vehicleList.size())
                 .filter(e->vehicleList.get(e)==null).count();
         return total-handicapReservationSlot;
     }
 
-
+    /**+
+     * @purpose To get time of vehicle parked on.
+     * @param vehicle to get time of.
+     * @return String format time.
+     */
     public String getTime(Vehicle vehicle){
-
         return vehicle.getTime();
     }
 
+    /**+
+     * @purpose Filling null at arraylist position, so that it can act as slots.
+     * @param start
+     * @param end
+     */
     public void initSlots(int start, int end){
         IntStream.range(start,end)
                 .forEach(e->vehicleList.add(null));
     }
 
+    /**
+     * purpose To get slot position of where vehicle is parked.
+     * @param vehicle
+     * @return position of vehicle in lot.
+     */
     public int getIndexOfVehicle(Vehicle vehicle){
         return vehicleList.indexOf(vehicle);
     }
 
+    /**
+     * @purpose Setting or updating reservations.
+     * @param reserveSlot no of slots.
+     */
     public void setHandicapReservationSlot(int reserveSlot){
         this.handicapReservationSlot=reserveSlot;
     }
 
-    public List<Integer> getVehiclesByColor(String color){
+    /**+
+     * @purpose To retrieve all vehicles with input color.
+     * @param color To search for.
+     * @return List which contains parking lot number and vehicles with input color.
+     */
 
+    public List<Integer> getVehiclesByColor(String color){
         return vehicleList.stream()
                 .filter(e->e!=null)
                 .filter(e->e.getColor().toLowerCase().equals(color))
@@ -169,6 +244,11 @@ public class ParkingLot{
 
     }
 
+    /**+
+     * @purpose To retrieve all vehicles with input brand.
+     * @param brandName To search for.
+     * @return List which contains parking lot number and vehicles with input brand.
+     */
     public List<Integer> getVehiclesByBrand(String brandName){
         return vehicleList.stream()
                 .filter(e->e!=null)
@@ -194,6 +274,10 @@ public class ParkingLot{
         return false;
     }
 
+    /**+
+     * @purpose To set rows from A to last alphabet.
+     * @param lastRow last alphabet of row.
+     */
     public void calculateRows(char lastRow){
         char row;
         int startIndexOfRow=0;
@@ -207,6 +291,10 @@ public class ParkingLot{
         }
     }
 
+    /**+
+     * @purpose To get vehicles information from rows.
+     * @param row last alphabet of row.
+     */
     public ArrayList<Vehicle> getByRows(char row){
         row=Character.toUpperCase(row);
         int startIndexOfRow = rowMap.get(row);
@@ -221,6 +309,16 @@ public class ParkingLot{
                 .filter(e->vehicleList.get(e)!=null)
                 .forEach(e->rowArrayList.add(vehicleList.get(e)));
         return rowArrayList;
+    }
+
+    /**+
+     * @purpose To retrieve all vehicles inside of parking system.
+     * @return List with all information in object.
+     */
+    public List<Vehicle> getVehicleList(){
+        return vehicleList.stream()
+                .filter(e->e!=null)
+                .collect(Collectors.toList());
     }
 
 }
