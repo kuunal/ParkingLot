@@ -9,10 +9,12 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 public class ParkingLot{
     int capacity;
     ArrayList<Vehicle> vehicleList = new ArrayList();
+    HashMap<Character,Integer> rowMap = new HashMap<>();
     Inform inform;
     int handicapReservationSlot;
 
@@ -192,6 +194,34 @@ public class ParkingLot{
         return false;
     }
 
+    public void calculateRows(char lastRow){
+        char row;
+        int startIndexOfRow=0;
+        if((lastRow-'A')>capacity)
+            throw new ParkingLotException("Cant assign that much row for few slots!");
+        else {
+            int noOfSlotsPerRow=capacity/(lastRow-'A');
+            for (row = 'A'; row <= lastRow && startIndexOfRow < capacity; row++, startIndexOfRow+=noOfSlotsPerRow) {
+                rowMap.put(row, startIndexOfRow);
+            }
+        }
+    }
+
+    public ArrayList<Vehicle> getByRows(char row){
+        row=Character.toUpperCase(row);
+        int startIndexOfRow = rowMap.get(row);
+        int endIndexOfRow;
+        char nextChar = (char)((int)row+1);
+        if(rowMap.containsKey(nextChar))
+             endIndexOfRow = rowMap.get(nextChar);
+        else
+            endIndexOfRow = capacity    ;
+        ArrayList<Vehicle> rowArrayList = new ArrayList<>();
+        IntStream.range(startIndexOfRow,endIndexOfRow)
+                .filter(e->vehicleList.get(e)!=null)
+                .forEach(e->rowArrayList.add(vehicleList.get(e)));
+        return rowArrayList;
+    }
 
 }
 

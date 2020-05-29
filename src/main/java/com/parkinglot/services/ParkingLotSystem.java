@@ -155,4 +155,17 @@ public class ParkingLotSystem {
         return list;
     }
 
+    public ArrayList<Vehicle> getVehicleByRow(char row){
+        ArrayList<Vehicle> rowvehicleList = new ArrayList<>();
+        parkingLotArrayList.stream()
+                .map(e->e.getByRows(row))
+                .forEach(rowvehicleList::addAll);
+        return rowvehicleList;
+    }
+
+    public void setRows(char lastRow){
+        parkingLotArrayList.stream()
+                .forEach(e->e.calculateRows(lastRow));
+    }
+
 }

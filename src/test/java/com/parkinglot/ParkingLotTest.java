@@ -17,6 +17,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.stream.IntStream;
 
 public class ParkingLotTest {
     Owner owner;
@@ -188,21 +189,6 @@ public class ParkingLotTest {
     }
 
     @Test
-    public void givenUnParkedVehicleToUnPark_WhenInParkingManager_ThrowsException() {
-        ParkingLotSystem parkingLotSystem = new ParkingLotSystem();
-        parkingLotSystem.setNumberOfLots(3,owner);
-        Vehicle vehicle = new Vehicle();
-        Vehicle vehicle1 = new Vehicle();
-        try {
-            parkingLotSystem.park(vehicle1);
-            parkingLotSystem.unPark(vehicle);
-            boolean isUnparked = parkingLotSystem.isUnparked(vehicle);
-        }catch (ParkingLotException e){
-            Assert.assertEquals("No such vehicle parked!",e.getMessage());
-        }
-    }
-
-    @Test
     public void givenVehicle_WhenUnparked_CreatesAVacantSpace_ForOtherVehicles() {
         ParkingLotSystem parkingLotSystem = new ParkingLotSystem();
         ParkingLot parkingLot0;
@@ -239,7 +225,7 @@ public class ParkingLotTest {
 
 
     @Test
-    public void givenUnParkedVehicle_WhenToFind_ThrowsException(){
+    public void givenUnParkedVehicle_WhenToFindLocation_ThrowsException(){
         try{
             ParkingLotSystem parkingLotSystem = new ParkingLotSystem();
             ParkingLot[] parkingLot = {
@@ -335,7 +321,7 @@ public class ParkingLotTest {
     }
 
     @Test
-    public void givenVehicleOfHandicapped_WhenToParkInDifferentSlot_ReturnsTrue(){
+    public void givenVehicleOfHandicap_WhenOneLotIsFull_ParksInOtherLot(){
         ParkingLot parkingLot1,parkingLot2 = null;
         Vehicle vehicle2 = new Vehicle();
         Vehicle vehicle1 = new Vehicle();
@@ -405,7 +391,7 @@ public class ParkingLotTest {
     }
 
     @Test
-    public void givenLargeVehicle_WhenToPark_ShouldParkInLotWithMostFreeSpace_WithoutaffectingReservation() {
+    public void givenLargeVehicle_WhenToPark_ShouldParkInLotWithMostFreeSpace_WithConsideringReservation() {
         ParkingLotSystem parkingLotSystem = new ParkingLotSystem();
         ParkingLot parkingLot0,parkingLot1,parkingLot2;
         ParkingLot[] parkingLot = {
@@ -542,6 +528,31 @@ public class ParkingLotTest {
         Assert.assertEquals(vehicle,vehicleByBrandNameList.get(0));
     }
 
+    @Test
+    public void givenRow_WhenToFindVehicle_ShouldReturnVehicle(){
+        ParkingLotSystem parkingLotSystem = new ParkingLotSystem();
+        parkingLotSystem.setNumberOfLots(2,owner,5);
+        parkingLotSystem.setRows('D');
+        IntStream.range(0,10)
+                .forEach(e->parkingLotSystem
+                        .park(new Vehicle("black",String.valueOf(e),"BMW")) );
+        ArrayList<Vehicle> arrayList = parkingLotSystem.getVehicleByRow('B');
+        arrayList.addAll(parkingLotSystem.getVehicleByRow('D'));
+        ArrayList<String > expectedList = new ArrayList<>();
+        expectedList.add("2");
+        expectedList.add("9");
+        Assert.assertTrue(expectedList.get(0).equals(arrayList.get(0).getNumberPlate()) &&
+                        expectedList.get(1).equals(arrayList.get(arrayList.size()-1).getNumberPlate()));
+    }
 
-
+    @Test
+    public void givenRowToFindVehicle_WhenMoreThanCapacity_ThrowsException(){
+        try {
+            ParkingLotSystem parkingLotSystem = new ParkingLotSystem();
+            parkingLotSystem.setNumberOfLots(2,owner,5);
+            parkingLotSystem.setRows('Z');
+        }catch (ParkingLotException e){
+            Assert.assertEquals("Cant assign that much row for few slots!",e.getMessage());
+        }
+    }
 }
