@@ -223,5 +223,11 @@ public class ParkingLot{
         return rowArrayList;
     }
 
+    public List<Vehicle> getVehicleList(){
+        return vehicleList.stream()
+                .filter(e->e!=null)
+                .collect(Collectors.toList());
+    }
+
 }
 

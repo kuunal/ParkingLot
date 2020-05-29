@@ -5,6 +5,7 @@ import com.parkinglot.model.Owner;
 import com.parkinglot.model.Vehicle;
 
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class ParkingLotSystem {
@@ -166,6 +167,13 @@ public class ParkingLotSystem {
     public void setRows(char lastRow){
         parkingLotArrayList.stream()
                 .forEach(e->e.calculateRows(lastRow));
+    }
+
+    public HashMap<Integer, List<Vehicle>> getAllVehicles(){
+        HashMap<Integer,List<Vehicle>> infoList = new HashMap<>();
+                parkingLotArrayList.stream()
+                        .forEach(e->infoList.put(parkingLotArrayList.indexOf(e),e.getVehicleList()));
+        return infoList;
     }
 
 }
